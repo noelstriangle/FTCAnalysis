@@ -13,10 +13,6 @@ public class ScoutTeamActivity extends AppCompatActivity {
     private SeekBar glyphBar;
     private TextView glyphText;
     private EditText teamText, teamNum;
-    private String team;
-    private int teamNumber;
-
-    teamCalc calc = new teamCalc();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,19 +55,6 @@ public class ScoutTeamActivity extends AppCompatActivity {
     }
 
 
-    public void getTeamInfo() {
-
-        team = String.valueOf(teamText.getText());
-        teamNumber = Integer.valueOf(String.valueOf(teamNum.getText()));
-        setTeamInfo();
-
-    }
-
-    public void setTeamInfo() {
-
-        calc.teams[0] = teamNumber;
-
-    }
 
 }
 

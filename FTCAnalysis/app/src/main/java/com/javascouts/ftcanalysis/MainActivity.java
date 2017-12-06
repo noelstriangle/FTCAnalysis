@@ -1,5 +1,6 @@
 package com.javascouts.ftcanalysis;
 
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +16,9 @@ import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
 
-    teamCalc calc = new teamCalc();
+    public static int[] teams;
+
+    public int numberOfTeams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         myToolbar.setTitleTextColor(android.graphics.Color.rgb(0,155,25));
+
+        TeamDatabase db = Room.databaseBuilder(getApplicationContext(), TeamDatabase.class, "team-database").build();
 
         //myToolbar.setLogo();
 
@@ -68,12 +73,12 @@ public class MainActivity extends AppCompatActivity {
 
         tbl.addView(tblrow0);
 
-        for(int i = 0; i < calc.numberOfTeams; i++) {
+        for(int i = 0; i < numberOfTeams; i++) {
 
             TableRow tblrow = new TableRow(this);
 
             TextView tv1 = new TextView(this);
-            tv1.setText("" + calc.teams[i]);
+            tv1.setText(teams[i]);
             tv1.setTextColor(android.graphics.Color.rgb(0,155,25));
             tv1.setGravity(Gravity.CENTER);
             tblrow.addView(tv1);
