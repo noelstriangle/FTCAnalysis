@@ -16,9 +16,13 @@ import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static int[] teams;
-
     public int numberOfTeams;
+
+    private TeamDatabase mDb;
+    private TeamDao mDao;
+    
+    public int[] teamNums;
+    public String[] teamNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,14 +30,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mDb = Room.databaseBuilder(getApplicationContext(),
+                        TeamDatabase.class, "team-database").build();
+                mDao = mDb.getTeamDao();
+                numberOfTeams = mDao.countTeams();
+
+                teamNums = mDao.getTeamNumbers();
+                teamNames = mDao.getTeamNames();
+            }
+        }).start();
+
         init();
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
         myToolbar.setTitleTextColor(android.graphics.Color.rgb(0,155,25));
-
-        TeamDatabase db = Room.databaseBuilder(getApplicationContext(), TeamDatabase.class, "team-database").build();
 
         //myToolbar.setLogo();
 
@@ -75,13 +91,30 @@ public class MainActivity extends AppCompatActivity {
 
         for(int i = 0; i < numberOfTeams; i++) {
 
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    teamNums = mDao.getTeamNumbers();
+                    teamNames = mDao.getTeamNames();
+
+                    numberOfTeams = mDao.countTeams();
+
+                }
+            }).start();
+
             TableRow tblrow = new TableRow(this);
 
             TextView tv1 = new TextView(this);
-            tv1.setText(teams[i]);
+            tv1.setText(teamNums[i]);
             tv1.setTextColor(android.graphics.Color.rgb(0,155,25));
             tv1.setGravity(Gravity.CENTER);
             tblrow.addView(tv1);
+            TextView tv2 = new TextView(this);
+            tv2.setText(teamNames[i]);
+            tv2.setTextColor(android.graphics.Color.rgb(0,155,25));
+            tv2.setGravity(Gravity.CENTER);
+            tblrow.addView(tv2);
 
             tbl.addView(tblrow);
 
