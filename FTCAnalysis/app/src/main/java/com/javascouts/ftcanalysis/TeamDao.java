@@ -18,14 +18,17 @@ public interface TeamDao {
     @Query("SELECT * FROM team")
     List<Team> getAll();
 
-    @Query("SELECT count(*) from team")
-    int countTeams();
-
     @Query("SELECT teamNumber from team ORDER BY teamNumber")
     int[] getTeamNumbers();
 
     @Query("SELECT team_name from team ORDER BY teamNumber")
     String[] getTeamNames();
+
+    @Query("SELECT auto_points from team ORDER BY teamNumber")
+    int[] getAutoPoints();
+
+    @Query("SELECT tele_points from team ORDER BY teamNumber")
+    int[] getTelePoints();
 
     @Insert
     void insertAll(Team... teams);

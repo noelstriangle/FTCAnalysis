@@ -238,9 +238,8 @@ public class ScoutTeamActivity extends AppCompatActivity {
                 tempTeam.setRelicZoneBari(relicZoneBari);
                 tempTeam.setUprightb(uprightb);
 
-                tempTeam.setAutoPoints((changeBoolToInt(jewelb) * 15) + (changeBoolToInt(glyphAutob) * 15) + (changeBoolToInt(autoCypherb) * 30) + (changeBoolToInt(safeZoneb) * 10));
+                tempTeam.setAutoPoints((changeBoolToInt(jewelb) * 30) + (changeBoolToInt(glyphAutob) * 15) + (changeBoolToInt(autoCypherb) * 30) + (changeBoolToInt(safeZoneb) * 10));
                 tempTeam.setTelePoints((glyphBari * 2) + (rowBari * 10) + (columnBari * 20) +
-
                         (changeBoolToInt(endGameCypherb) * 30) + (relicBari * (10 * (2 ^ relicZoneBari - 1)) + (changeBoolToInt(uprightb) * 15)));
 
                 addTeam(db, tempTeam);
