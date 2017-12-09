@@ -7,10 +7,12 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -143,6 +145,8 @@ public class MainActivity extends AppCompatActivity {
         Log.d("INITIALIZATION/RESUMING", "STARTING FOR LOOP");
         for(int i = 0; i < numberOfTeams; i++) {
 
+            final int tN = teamNums[i];
+
             TableRow tblrow = new TableRow(this);
 
             Log.d("INITIALIZATION/RESUMING", "TableRow: " + String.valueOf(i));
@@ -169,6 +173,18 @@ public class MainActivity extends AppCompatActivity {
             tv3.setGravity(Gravity.CENTER);
             tblrow.addView(tv3);
             Log.d("INITIALIZATION/RESUMING", "TEXT 3(" + String.valueOf(teamTotal) + ") added.");
+            Button button = new Button(this);
+            button.setText("");
+            button.setWidth(10);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    startTeamDetails(view, tN);
+
+                }
+            });
+            tblrow.addView(button);
             tbl.addView(tblrow);
             Log.d("INITIALIZATION/RESUMING", "TableRow added to Tabel.");
 
@@ -259,10 +275,29 @@ public class MainActivity extends AppCompatActivity {
             tv3.setGravity(Gravity.CENTER);
             tblrow.addView(tv3);
             Log.d("RESUMING", "TEXT 3(" + String.valueOf(teamTotal) + ") added.");
+            tblrow.setMinimumHeight(20);
             tbl.addView(tblrow);
             Log.d("RESUMING", "TableRow added to Tabel.");
 
         }
+
+    }
+
+    public void startTeamDetails(View view, int teamNum) {
+
+        Intent intent = new Intent(this, TeamDetailsActivity.class);
+        intent.putExtra("TEAM_NUMBER", teamNum);
+        Log.d("TESTING", "Extra:" + String.valueOf(teamNum) + " set.");
+        startActivity(intent);
+
+    }
+
+    @Override
+    protected void onPause() {
+
+        super.onPause();
+
+        mDb.close();
 
     }
 

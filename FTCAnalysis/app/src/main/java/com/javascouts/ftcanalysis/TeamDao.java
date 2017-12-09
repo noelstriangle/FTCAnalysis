@@ -30,6 +30,9 @@ public interface TeamDao {
     @Query("SELECT tele_points from team ORDER BY teamNumber")
     int[] getTelePoints();
 
+    @Query("SELECT * FROM team WHERE teamNumber = :teamNumber")
+    Team getTeam(int teamNumber);
+
     @Insert
     void insertAll(Team... teams);
 

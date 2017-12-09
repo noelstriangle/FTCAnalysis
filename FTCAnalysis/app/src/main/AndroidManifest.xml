@@ -22,6 +22,8 @@
 
         <activity android:name=".ScoutTeamActivity"/>
 
+        <activity android:name=".TeamDetailsActivity"/>
+
     </application>
 
 </manifest>
