@@ -101,8 +101,6 @@ public class MainActivity extends AppCompatActivity {
 
         myToolbar.setTitleTextColor(android.graphics.Color.rgb(0,155,25));
 
-        //myToolbar.setLogo();
-
     }
 
     public void scoutNewTeam(View view) {

@@ -101,6 +101,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
         teamNameText.setTop(0);
         teamNameText.setTextColor(android.graphics.Color.rgb(0,155,25));
         teamNameText.setGravity(Gravity.CENTER);
+
         TextView teamNumText = new TextView(this);
         teamNumText.setText(String.valueOf(teamNumber));
         teamNumText.setTextSize(24);
@@ -108,8 +109,58 @@ public class TeamDetailsActivity extends AppCompatActivity {
         teamNumText.setTextColor(android.graphics.Color.rgb(0,155,25));
         teamNumText.setGravity(Gravity.CENTER);
 
+        TextView canJewelText = new TextView(this);
+        canJewelText.setText(returnCanOrCant(canJewel) + "knock the correct jewel off.";
+        canJewelText.setTextSize(16);
+        canJewelText.setTop(72);
+        canJewelText.setLeft(16);
+        canJewelText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        canJewelText.setGravity(Gravity.START);
+
+        TextView canGlyphAutoText = new TextView(this);
+        canGlyphAutoText.setText(returnCanOrCant(canGlyphAuto) + "place the glyph in the box.");
+        canGlyphAutoText.setTextSize(16);
+        canGlyphAutoText.setTop(90);
+        canGlyphAutoText.setLeft(16);
+        canGlyphAutoText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        canGlyphAutoText.setGravity(Gravity.START);
+
+        TextView canAutoCypherText = new TextView(this);
+        canAutoCypherText.setText(returnCanOrCant(canCypher) + "place the glyph in the correct column.");
+        canAutoCypherText.setTextSize(16);
+        canAutoCypherText.setTop(108);
+        canAutoCypherText.setLeft(16);
+        canAutoCypherText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        canAutoCypherText.setGravity(Gravity.START);
+
+        TextView canSafeZoneText = new TextView(this);
+        canSafeZoneText.setText(returnCanOrCant(canSafeZone) + "park in the safe zone.");
+        canSafeZoneText.setTextSize(16);
+        canSafeZoneText.setTop(126);
+        canSafeZoneText.setLeft(16);
+        canSafeZoneText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        canSafeZoneText.setGravity(Gravity.START);
+
+
         llayout.addView(teamNameText);
         llayout.addView(teamNumText);
+        llayout.addView(canJewelText);
+        llayout.addView(canGlyphAutoText);
+        llayout.addView(canAutoCypherText);
+        llayout.addView(canSafeZoneText);
 
+    }
+
+    public String returnCanOrCant(boolean b) {
+
+        if(b) {
+
+            return "Can";
+
+        } else {
+
+            return "Can not";
+
+        }
     }
 }
