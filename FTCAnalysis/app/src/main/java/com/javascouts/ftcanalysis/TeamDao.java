@@ -1,6 +1,7 @@
 package com.javascouts.ftcanalysis;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
@@ -35,5 +36,8 @@ public interface TeamDao {
 
     @Insert
     void insertAll(Team... teams);
+
+    @Delete
+    void deleteAll(Team... teams);
 
 }

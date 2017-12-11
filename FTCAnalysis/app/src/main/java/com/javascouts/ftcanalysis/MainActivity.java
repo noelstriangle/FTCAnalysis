@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
@@ -21,6 +23,8 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Boolean.FALSE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -100,6 +104,31 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         myToolbar.setTitleTextColor(android.graphics.Color.rgb(0,155,25));
+
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menus, menu);
+        return true;
+
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch(item.getItemId()){
+
+            case R.id.action_settings:
+
+                break;
+
+            case R.id.action_delete:
+
+                item.setVisible(false);
+
+        }
+
+        return true;
 
     }
 
