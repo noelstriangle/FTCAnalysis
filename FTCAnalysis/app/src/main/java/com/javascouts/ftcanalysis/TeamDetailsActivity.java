@@ -1,17 +1,11 @@
 package com.javascouts.ftcanalysis;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -19,11 +13,6 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.opencsv.CSVWriter;
-
-import java.io.File;
-import java.io.FileWriter;
 
 /**
  * Created by Liam on 12/9/2017.
@@ -62,10 +51,16 @@ public class TeamDetailsActivity extends AppCompatActivity {
         toast1 = new Toast(this).makeText(this, "Delete Canceled.", Toast.LENGTH_LONG);
         toast1.setText("Delete Canceled.");
 
-        Toolbar myToolbar = findViewById(R.id.toolbar);
+        Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
-
         myToolbar.setTitleTextColor(android.graphics.Color.rgb(0,155,25));
+        myToolbar.setTitle("Team Details");
+
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
+
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
 
     }
 
@@ -167,7 +162,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
             }
         }).start();
 
-        Toolbar myToolbar = findViewById(R.id.toolbar);
+        Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
 
         myToolbar.setTitleTextColor(android.graphics.Color.rgb(0,155,25));
@@ -296,6 +291,14 @@ public class TeamDetailsActivity extends AppCompatActivity {
             return "Can not";
 
         }
+    }
+
+    @Override
+    protected void onPause() {
+
+        super.onPause();
+        mDb.close();
+
     }
 
 }

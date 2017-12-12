@@ -2,16 +2,12 @@ package com.javascouts.ftcanalysis;
 
 import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -25,14 +21,10 @@ import android.widget.TextView;
 
 import com.opencsv.CSVWriter;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.Boolean.FALSE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 
-        Toolbar myToolbar = findViewById(R.id.toolbar);
+        Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
 
         myToolbar.setTitleTextColor(android.graphics.Color.rgb(0,155,25));

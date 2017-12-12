@@ -1,11 +1,9 @@
 package com.javascouts.ftcanalysis;
 
 import android.arch.persistence.room.Room;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -36,9 +34,16 @@ public class ScoutTeamActivity extends AppCompatActivity {
         db = Room.databaseBuilder(getApplicationContext(),
                 TeamDatabase.class, "team-database").build();
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
         myToolbar.setTitleTextColor(android.graphics.Color.rgb(0,155,25));
+        myToolbar.setTitle("Scout New Team");
+
+        android.support.v7.app.ActionBar ab = getSupportActionBar();
+
+        if(ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
 
         jewel = findViewById(R.id.jewel);
         glyphAuto = findViewById(R.id.glyphAuto);
@@ -272,6 +277,15 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
         db.TeamDao().insertAll(team);
         return team;
+
+    }
+
+    @Override
+    protected void onPause() {
+
+        super.onPause();
+
+        db.close();
 
     }
 
