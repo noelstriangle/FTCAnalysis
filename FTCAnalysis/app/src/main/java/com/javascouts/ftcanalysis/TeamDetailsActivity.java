@@ -4,7 +4,9 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +19,9 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileWriter;
 
 /**
  * Created by Liam on 12/9/2017.
@@ -33,6 +38,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
     private Toast toast1;
 
+    private Team toDelete;
     private Team tempTeam;
     private String teamName;
     private boolean canJewel, canGlyphAuto, canCypher, canSafeZone, canCypherEndgame, canUpright;
@@ -51,7 +57,8 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         init(teamN);
 
-        toast1 = new Toast(this).makeText(this, "Delete Canceled", Toast.LENGTH_LONG);
+        toast1 = new Toast(this).makeText(this, "Delete Canceled.", Toast.LENGTH_LONG);
+        toast1.setText("Delete Canceled.");
 
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
@@ -78,10 +85,14 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
+                builder.setMessage("Delete team " + String.valueOf(teamNumber) + " forever?");
+
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
-                        mDao.deleteAll(tempTeam);
+                        toDelete = mDao.getTeam(teamN);
+                        mDao.deleteAll(toDelete);
+                        finish();
 
                     }
                 });
@@ -89,7 +100,6 @@ public class TeamDetailsActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
 
                         toast1.show();
-                        finish();
 
                     }
                 });
@@ -250,4 +260,31 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         }
     }
+
+    /*public boolean exportToDatabase() {
+
+        String FILENAME = "log.csv";
+        File directoryDownload = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File logDir = new File(directoryDownload, FILENAME);
+        try {
+            logDir.createNewFile();
+            CSVWriter csvWriter = new CSVWriter(new FileWriter(logDir));
+            Cursor curCSV = ourDatabase.rawQuery("SELECT * FROM practiceReport", null);
+            csvWriter.writeNext(curCSV.getColumnNames());
+            while (curCSV.moveToNext()) {
+                String arrStr[] = { curCSV.getString(1)+ ",", curCSV.getString(2)+ ",",
+                        curCSV.getString(3)+ ",", curCSV.getString(4)+ ",", curCSV.getString(5)+ ","};
+                csvWriter.writeNext(arrStr);
+            }
+            csvWriter.close();
+            curCSV.close();
+            return true;
+        } catch (Exception e) {
+            Log.e("MainActivity", e.getMessage(), e);
+            return false;
+        }
+
+
+    }*/
+
 }
