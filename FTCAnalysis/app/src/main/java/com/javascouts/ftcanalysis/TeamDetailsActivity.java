@@ -20,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.opencsv.CSVWriter;
+
 import java.io.File;
 import java.io.FileWriter;
 
@@ -70,6 +72,8 @@ public class TeamDetailsActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menus, menu);
+        MenuItem toHide = menu.findItem(R.id.action_export);
+        toHide.setVisible(false);
         return true;
     }
 
@@ -90,8 +94,14 @@ public class TeamDetailsActivity extends AppCompatActivity {
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
-                        toDelete = mDao.getTeam(teamN);
-                        mDao.deleteAll(toDelete);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                toDelete = mDao.getTeam(teamN);
+                                mDao.deleteAll(toDelete);
+                            }
+                        }).start();
+
                         finish();
 
                     }
@@ -236,6 +246,30 @@ public class TeamDetailsActivity extends AppCompatActivity {
         columnText.setTextColor(android.graphics.Color.rgb(0,155,25));
         columnText.setGravity(Gravity.START);
 
+        TextView relicText = new TextView(this);
+        relicText.setText("Can place " + String.valueOf(relics) + " relics.");
+        relicText.setTextSize(16);
+        relicText.setTop(180);
+        relicText.setLeft(16);
+        relicText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        relicText.setGravity(Gravity.START);
+
+        TextView relicZoneText = new TextView(this);
+        relicZoneText.setText("Can place the relics in zone " + String.valueOf(relicZone) + ".");
+        relicZoneText.setTextSize(16);
+        relicZoneText.setTop(198);
+        relicZoneText.setLeft(16);
+        relicZoneText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        relicZoneText.setGravity(Gravity.START);
+
+        TextView uprightText = new TextView(this);
+        uprightText.setText(returnCanOrCant(canUpright) + " place the relics upright.");
+        uprightText.setTextSize(16);
+        uprightText.setTop(214);
+        uprightText.setLeft(16);
+        uprightText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        uprightText.setGravity(Gravity.START);
+
         llayout.addView(teamNameText);
         llayout.addView(teamNumText);
         llayout.addView(canJewelText);
@@ -245,6 +279,9 @@ public class TeamDetailsActivity extends AppCompatActivity {
         llayout.addView(glyphText);
         llayout.addView(rowText);
         llayout.addView(columnText);
+        llayout.addView(relicText);
+        llayout.addView(relicZoneText);
+        llayout.addView(uprightText);
 
     }
 
@@ -260,31 +297,5 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         }
     }
-
-    /*public boolean exportToDatabase() {
-
-        String FILENAME = "log.csv";
-        File directoryDownload = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File logDir = new File(directoryDownload, FILENAME);
-        try {
-            logDir.createNewFile();
-            CSVWriter csvWriter = new CSVWriter(new FileWriter(logDir));
-            Cursor curCSV = ourDatabase.rawQuery("SELECT * FROM practiceReport", null);
-            csvWriter.writeNext(curCSV.getColumnNames());
-            while (curCSV.moveToNext()) {
-                String arrStr[] = { curCSV.getString(1)+ ",", curCSV.getString(2)+ ",",
-                        curCSV.getString(3)+ ",", curCSV.getString(4)+ ",", curCSV.getString(5)+ ","};
-                csvWriter.writeNext(arrStr);
-            }
-            csvWriter.close();
-            curCSV.close();
-            return true;
-        } catch (Exception e) {
-            Log.e("MainActivity", e.getMessage(), e);
-            return false;
-        }
-
-
-    }*/
 
 }

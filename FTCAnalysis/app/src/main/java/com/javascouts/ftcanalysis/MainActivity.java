@@ -1,10 +1,14 @@
 package com.javascouts.ftcanalysis;
 
+import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -19,8 +23,12 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.opencsv.CSVWriter;
+
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,48 +62,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mDb = Room.databaseBuilder(getApplicationContext(),
-                                TeamDatabase.class, "team-database").build();
-                        mDao = mDb.getTeamDao();
-
-                        Log.d("CREATION", "Database Instantiated.");
-
-                        resumeTeams = new ArrayList<>();
-                        teams = new ArrayList<>();
-
-                        teams = mDao.getAll();
-                        numberOfTeams = teams.size();
-
-                        Log.d("CREATION", "numberOfTeams: " + String.valueOf(numberOfTeams));
-
-                        teamNums = new int[teams.size()];
-                        teamNames = new String[teams.size()];
-                        teamAutos = new int[teams.size()];
-                        teamTeles = new int[teams.size()];
-
-                        Log.d("CREATION", "Arrays Created.");
-
-                        for(int i = 0; i < numberOfTeams; i++) {
-
-                            tempTeam = teams.get(i);
-
-                            teamNums[i] = tempTeam.getTeamNumber();
-                            teamNames[i] = tempTeam.getTeamName();
-                            teamAutos[i] = tempTeam.getAutoPoints();
-                            teamTeles[i] = tempTeam.getTelePoints();
-
-                            Log.d("CREATION", "teamInfo Updated: " + teamNums[i] + " " + teamNames[i] + " " + teamAutos[i] + " " + teamTeles[i]);
-
-                        }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        initStuff();
-                    }
-                });
+            @Override
+            public void run() {
+                mDb = Room.databaseBuilder(getApplicationContext(),
+                        TeamDatabase.class, "team-database").build();
+                mDao = mDb.getTeamDao();
 
             }
         }).start();
@@ -110,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menus, menu);
+        MenuItem toHide = menu.findItem(R.id.action_delete);
+        toHide.setVisible(false);
         return true;
 
     }
@@ -122,9 +95,39 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
 
-            case R.id.action_delete:
+            case R.id.action_export:
 
-                item.setVisible(false);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                builder.setTitle("Export Database");
+
+                builder.setMessage("Exporting this database will create a .csv file containing the data you have scouted. The file will be located in your Downloads folder. Proceed?");
+
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                exportToDatabase();
+
+                            }
+                        }).start();
+
+                    }
+                });
+                builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+
+                dialog.show();
+
+                break;
 
         }
 
@@ -278,33 +281,28 @@ public class MainActivity extends AppCompatActivity {
 
             TableRow tblrow = new TableRow(this);
 
-            Log.d("RESUMING", "TableRow: " + String.valueOf(i));
-
             teamTotal = teamAutos[i] + teamTeles[i];
-
-            Log.d("RESUMING", "teamTotal: " + String.valueOf(i) + ": " + String.valueOf(teamTotal));
 
             TextView tv1 = new TextView(this);
             tv1.setText(String.valueOf(teamNums[i]));
             tv1.setTextColor(android.graphics.Color.rgb(0,155,25));
             tv1.setGravity(Gravity.CENTER);
             tblrow.addView(tv1);
-            Log.d("RESUMING", "TEXT 1(" + String.valueOf(teamNums[i]) + ") added.");
+
             TextView tv2 = new TextView(this);
             tv2.setText(String.valueOf(teamNames[i]));
             tv2.setTextColor(android.graphics.Color.rgb(0,155,25));
             tv2.setGravity(Gravity.CENTER);
             tblrow.addView(tv2);
-            Log.d("RESUMING", "TEXT 2(" + String.valueOf(teamNames[i]) + ") added.");
+
             TextView tv3 = new TextView(this);
             tv3.setText(String.valueOf(teamTotal));
             tv3.setTextColor(android.graphics.Color.rgb(0,155,25));
             tv3.setGravity(Gravity.CENTER);
             tblrow.addView(tv3);
-            Log.d("RESUMING", "TEXT 3(" + String.valueOf(teamTotal) + ") added.");
+
             tblrow.setMinimumHeight(20);
             tbl.addView(tblrow);
-            Log.d("RESUMING", "TableRow added to Tabel.");
 
         }
 
@@ -325,6 +323,38 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
         mDb.close();
+
+    }
+
+    public boolean exportToDatabase() {
+
+        String FILENAME = "teamDatabase.csv";
+        File directoryDownload = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File logDir = new File(directoryDownload, FILENAME);
+        try {
+            logDir.createNewFile();
+            CSVWriter csvWriter = new CSVWriter(new FileWriter(logDir));
+            Cursor curCSV = mDb.query("SELECT * FROM team", null);
+            csvWriter.writeNext(curCSV.getColumnNames());
+            while (curCSV.moveToNext()) {
+                String arrStr[] = { curCSV.getString(1)+ " ", curCSV.getString(2)+ " ",
+                        curCSV.getString(3)+ " ", curCSV.getString(4)+ " ",
+                        curCSV.getString(5)+ " ", curCSV.getString(6)+ " ",
+                        curCSV.getString(7)+ " ", curCSV.getString(8)+ " ",
+                        curCSV.getString(9)+ " ", curCSV.getString(10)+ " ",
+                        curCSV.getString(10)+ " ", curCSV.getString(11)+ " ",
+                        curCSV.getString(12)+ " ", curCSV.getString(13)+ " ",
+                        curCSV.getString(14)+ " "};
+                csvWriter.writeNext(arrStr);
+            }
+            csvWriter.close();
+            curCSV.close();
+            return true;
+        } catch (Exception e) {
+            Log.e("MainActivity", e.getMessage(), e);
+            return false;
+        }
+
 
     }
 

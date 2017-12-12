@@ -6,4 +6,5 @@
     <string name="doDeletePart2">forever?</string>
     <string name="ok">Yeah, sure</string>
     <string name="no">I DIDNT MEAN TO</string>
+    <string name="export">Export</string>
 </resources>
