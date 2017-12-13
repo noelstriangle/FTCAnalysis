@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">FTC Analysis</string>
-    <string name="scout_new_team">Scout New Team</string>
+    <string name="action_settings">Settings</string>
+    <string name="delete_team">Delete Team</string>
+    <string name="doDeletePart1">Delete team </string>
+    <string name="doDeletePart2">forever?</string>
+    <string name="ok">Yeah, sure</string>
+    <string name="no">I DIDNT MEAN TO</string>
+    <string name="export">Export</string>
 </resources>
