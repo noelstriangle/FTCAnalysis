@@ -4,10 +4,12 @@ import android.arch.persistence.room.Room;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.EditText;
+import android.support.v7.app.ActionBar;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -37,13 +39,11 @@ public class ScoutTeamActivity extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
         myToolbar.setTitleTextColor(android.graphics.Color.rgb(0,155,25));
-        myToolbar.setTitle("Scout New Team");
 
-        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
 
-        if(ab != null) {
-            ab.setDisplayHomeAsUpEnabled(true);
-        }
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         jewel = findViewById(R.id.jewel);
         glyphAuto = findViewById(R.id.glyphAuto);
@@ -169,8 +169,7 @@ public class ScoutTeamActivity extends AppCompatActivity {
             }
         });
 
-
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
     }
 
