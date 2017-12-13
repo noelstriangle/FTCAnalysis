@@ -10,6 +10,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.support.v7.app.ActionBar;
+import android.widget.Toast;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -42,7 +43,8 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
 
-        actionBar.setHomeButtonEnabled(true);
+        actionBar.setTitle("Scout New Team");
+
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         jewel = findViewById(R.id.jewel);
@@ -209,7 +211,15 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
                 } catch(NumberFormatException e) {
 
-                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Toast toast = new Toast(ScoutTeamActivity.this).makeText(ScoutTeamActivity.this, "Team Number Unspecified", Toast.LENGTH_LONG);
+                            toast.show();
+
+                        }
+                    });
                     return;
 
                 }

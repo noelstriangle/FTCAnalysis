@@ -59,6 +59,8 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
 
+        actionBar.setTitle("Team Details");
+
         actionBar.setDisplayHomeAsUpEnabled(true);
 
     }

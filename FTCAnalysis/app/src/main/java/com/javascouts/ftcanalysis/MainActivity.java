@@ -197,7 +197,6 @@ public class MainActivity extends AppCompatActivity {
             Log.d("INITIALIZATION/RESUMING", "TEXT 3(" + String.valueOf(teamTotal) + ") added.");
             Button button = new Button(this);
             button.setText("");
-            button.setWidth(10);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
