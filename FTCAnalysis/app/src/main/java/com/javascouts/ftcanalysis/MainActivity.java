@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
 
-        myToolbar.setTitleTextColor(android.graphics.Color.rgb(0,155,25));
+        myToolbar.setTitleTextColor(android.graphics.Color.rgb(33,81,8));
 
     }
 
@@ -142,22 +142,22 @@ public class MainActivity extends AppCompatActivity {
 
         TextView txt0 = new TextView(this);
         txt0.setText("  Team Number  ");
-        txt0.setTextColor(android.graphics.Color.rgb(0,155,25));
+        txt0.setTextColor(android.graphics.Color.rgb(33,81,8));
         tblrow0.addView(txt0);
 
         TextView txt1 = new TextView(this);
         txt1.setText("  Team Name  ");
-        txt1.setTextColor(android.graphics.Color.rgb(0,155,25));
+        txt1.setTextColor(android.graphics.Color.rgb(33,81,8));
         tblrow0.addView(txt1);
 
         TextView txt2 = new TextView(this);
         txt2.setText("  Total Points  ");
-        txt2.setTextColor(android.graphics.Color.rgb(0,155,25));
+        txt2.setTextColor(android.graphics.Color.rgb(33,81,8));
         tblrow0.addView(txt2);
 
         TextView txt3 = new TextView(this);
         txt3.setText("  Details  ");
-        txt3.setTextColor(android.graphics.Color.rgb(0,155,25));
+        txt3.setTextColor(android.graphics.Color.rgb(33,81,8));
         tblrow0.addView(txt3);
 
         tbl.addView(tblrow0);
@@ -179,19 +179,19 @@ public class MainActivity extends AppCompatActivity {
 
             TextView tv1 = new TextView(this);
             tv1.setText(String.valueOf(teamNums[i]));
-            tv1.setTextColor(android.graphics.Color.rgb(0,155,25));
+            tv1.setTextColor(android.graphics.Color.rgb(33,81,8));
             tv1.setGravity(Gravity.CENTER);
             tblrow.addView(tv1);
             Log.d("INITIALIZATION/RESUMING", "TEXT 1(" + String.valueOf(teamNums[i]) + ") added.");
             TextView tv2 = new TextView(this);
             tv2.setText(String.valueOf(teamNames[i]));
-            tv2.setTextColor(android.graphics.Color.rgb(0,155,25));
+            tv2.setTextColor(android.graphics.Color.rgb(33,81,8));
             tv2.setGravity(Gravity.CENTER);
             tblrow.addView(tv2);
             Log.d("INITIALIZATION/RESUMING", "TEXT 2(" + String.valueOf(teamNames[i]) + ") added.");
             TextView tv3 = new TextView(this);
             tv3.setText(String.valueOf(teamTotal));
-            tv3.setTextColor(android.graphics.Color.rgb(0,155,25));
+            tv3.setTextColor(android.graphics.Color.rgb(33,81,8));
             tv3.setGravity(Gravity.CENTER);
             tblrow.addView(tv3);
             Log.d("INITIALIZATION/RESUMING", "TEXT 3(" + String.valueOf(teamTotal) + ") added.");
@@ -277,19 +277,19 @@ public class MainActivity extends AppCompatActivity {
 
             TextView tv1 = new TextView(this);
             tv1.setText(String.valueOf(teamNums[i]));
-            tv1.setTextColor(android.graphics.Color.rgb(0,155,25));
+            tv1.setTextColor(android.graphics.Color.rgb(33,81,8));
             tv1.setGravity(Gravity.CENTER);
             tblrow.addView(tv1);
 
             TextView tv2 = new TextView(this);
             tv2.setText(String.valueOf(teamNames[i]));
-            tv2.setTextColor(android.graphics.Color.rgb(0,155,25));
+            tv2.setTextColor(android.graphics.Color.rgb(33,81,8));
             tv2.setGravity(Gravity.CENTER);
             tblrow.addView(tv2);
 
             TextView tv3 = new TextView(this);
             tv3.setText(String.valueOf(teamTotal));
-            tv3.setTextColor(android.graphics.Color.rgb(0,155,25));
+            tv3.setTextColor(android.graphics.Color.rgb(33,81,8));
             tv3.setGravity(Gravity.CENTER);
             tblrow.addView(tv3);
 

@@ -55,7 +55,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         Toolbar myToolbar = findViewById(R.id.toolbarTD);
         setSupportActionBar(myToolbar);
-        myToolbar.setTitleTextColor(android.graphics.Color.rgb(0,155,25));
+        myToolbar.setTitleTextColor(android.graphics.Color.rgb(33,81,8));
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -169,7 +169,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         Toolbar myToolbar = findViewById(R.id.toolbarTD);
         setSupportActionBar(myToolbar);
-        myToolbar.setTitleTextColor(android.graphics.Color.rgb(0,155,25));
+        myToolbar.setTitleTextColor(android.graphics.Color.rgb(33,81,8));
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -183,14 +183,14 @@ public class TeamDetailsActivity extends AppCompatActivity {
         teamNameText.setText(teamName);
         teamNameText.setTextSize(32);
         teamNameText.setTop(0);
-        teamNameText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        teamNameText.setTextColor(android.graphics.Color.rgb(33,81,8));
         teamNameText.setGravity(Gravity.CENTER);
 
         TextView teamNumText = new TextView(this);
         teamNumText.setText(String.valueOf(teamNumber));
         teamNumText.setTextSize(24);
         teamNumText.setTop(36);
-        teamNumText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        teamNumText.setTextColor(android.graphics.Color.rgb(33,81,8));
         teamNumText.setGravity(Gravity.CENTER);
 
         TextView canJewelText = new TextView(this);
@@ -198,7 +198,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
         canJewelText.setTextSize(16);
         canJewelText.setTop(72);
         canJewelText.setLeft(16);
-        canJewelText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        canJewelText.setTextColor(android.graphics.Color.rgb(33,81,8));
         canJewelText.setGravity(Gravity.START);
 
         TextView canGlyphAutoText = new TextView(this);
@@ -206,7 +206,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
         canGlyphAutoText.setTextSize(16);
         canGlyphAutoText.setTop(90);
         canGlyphAutoText.setLeft(16);
-        canGlyphAutoText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        canGlyphAutoText.setTextColor(android.graphics.Color.rgb(33,81,8));
         canGlyphAutoText.setGravity(Gravity.START);
 
         TextView canAutoCypherText = new TextView(this);
@@ -214,7 +214,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
         canAutoCypherText.setTextSize(16);
         canAutoCypherText.setTop(108);
         canAutoCypherText.setLeft(16);
-        canAutoCypherText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        canAutoCypherText.setTextColor(android.graphics.Color.rgb(33,81,8));
         canAutoCypherText.setGravity(Gravity.START);
 
         TextView canSafeZoneText = new TextView(this);
@@ -222,7 +222,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
         canSafeZoneText.setTextSize(16);
         canSafeZoneText.setTop(126);
         canSafeZoneText.setLeft(16);
-        canSafeZoneText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        canSafeZoneText.setTextColor(android.graphics.Color.rgb(33,81,8));
         canSafeZoneText.setGravity(Gravity.START);
 
         TextView glyphText = new TextView(this);
@@ -230,7 +230,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
         glyphText.setTextSize(16);
         glyphText.setTop(126);
         glyphText.setLeft(16);
-        glyphText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        glyphText.setTextColor(android.graphics.Color.rgb(33,81,8));
         glyphText.setGravity(Gravity.START);
 
         TextView rowText = new TextView(this);
@@ -238,7 +238,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
         rowText.setTextSize(16);
         rowText.setTop(144);
         rowText.setLeft(16);
-        rowText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        rowText.setTextColor(android.graphics.Color.rgb(33,81,8));
         rowText.setGravity(Gravity.START);
 
         TextView columnText = new TextView(this);
@@ -246,7 +246,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
         columnText.setTextSize(16);
         columnText.setTop(162);
         columnText.setLeft(16);
-        columnText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        columnText.setTextColor(android.graphics.Color.rgb(33,81,8));
         columnText.setGravity(Gravity.START);
 
         TextView relicText = new TextView(this);
@@ -254,7 +254,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
         relicText.setTextSize(16);
         relicText.setTop(180);
         relicText.setLeft(16);
-        relicText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        relicText.setTextColor(android.graphics.Color.rgb(33,81,8));
         relicText.setGravity(Gravity.START);
 
         TextView relicZoneText = new TextView(this);
@@ -262,7 +262,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
         relicZoneText.setTextSize(16);
         relicZoneText.setTop(198);
         relicZoneText.setLeft(16);
-        relicZoneText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        relicZoneText.setTextColor(android.graphics.Color.rgb(33,81,8));
         relicZoneText.setGravity(Gravity.START);
 
         TextView uprightText = new TextView(this);
@@ -270,7 +270,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
         uprightText.setTextSize(16);
         uprightText.setTop(214);
         uprightText.setLeft(16);
-        uprightText.setTextColor(android.graphics.Color.rgb(0,155,25));
+        uprightText.setTextColor(android.graphics.Color.rgb(33,81,8));
         uprightText.setGravity(Gravity.START);
 
         llayout.addView(teamNameText);
