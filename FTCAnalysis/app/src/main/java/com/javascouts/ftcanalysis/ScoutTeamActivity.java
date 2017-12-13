@@ -272,10 +272,9 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
     }
 
-    private static Team addTeam(final TeamDatabase db, Team team) {
+    private static void addTeam(final TeamDatabase db, Team team) {
 
         db.TeamDao().insertAll(team);
-        return team;
 
     }
 
