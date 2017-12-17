@@ -10,7 +10,7 @@ import android.content.Context;
  * Created by seed on 12/5/17.
  */
 
-@Database(entities = {Team.class}, version = 1, exportSchema = false)
+@Database(entities = {Team.class}, version = 3, exportSchema = false)
 public abstract class TeamDatabase extends RoomDatabase {
 
     private static TeamDatabase INSTANCE;

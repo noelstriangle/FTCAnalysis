@@ -36,7 +36,7 @@
             android:contentDescription="getTeamNAme"
             android:ems="10"
             android:hint="Team Name"
-            android:inputType="textPersonName"
+            android:inputType="textCapWords"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Small"
             app2:layout_constraintStart_toStartOf="parent"
             app2:layout_constraintTop_toBottomOf="@+id/toolbarST"
@@ -406,7 +406,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="48dp"
             android:onClick="getInfoAndKill"
             android:text="Finish Team"
             app2:layout_constraintEnd_toEndOf="parent"
@@ -431,6 +431,17 @@
             app2:layout_constraintTop_toBottomOf="@+id/jewel"
             app:layout_constraintStart_toEndOf="@+id/glyphAuto"
             app:layout_constraintTop_toBottomOf="@+id/jewel" />
+
+        <CheckBox
+            android:id="@+id/endBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Can you park at endgame?"
+            android:textAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Small"
+            app2:layout_constraintStart_toStartOf="parent"
+            app2:layout_constraintTop_toBottomOf="@+id/upright" />
 
 
     </android.support.constraint.ConstraintLayout>

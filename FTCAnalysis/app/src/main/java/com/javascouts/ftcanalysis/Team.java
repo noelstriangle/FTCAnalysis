@@ -8,7 +8,10 @@ import android.arch.persistence.room.*;
 @Entity(tableName = "team")
 public class Team {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @ColumnInfo(name="team_number")
     private int teamNumber;
 
     @ColumnInfo(name="team_name")
@@ -38,6 +41,9 @@ public class Team {
     @ColumnInfo(name="canUpright")
     private boolean uprightb;
 
+    @ColumnInfo(name="canBalance")
+    private boolean balanceb;
+
     @ColumnInfo(name="tele_glyphs")
     private int glyphBari;
 
@@ -52,6 +58,12 @@ public class Team {
 
     @ColumnInfo(name="tele_relic_zone")
     private int relicZoneBari;
+
+    @ColumnInfo(name="other_notes")
+    private String otherNotes;
+
+    public int getId() {                            return this.id;}
+    public void setId(int value) {                  this.id = value;}
 
     public int getTeamNumber() {                    return this.teamNumber;}
     public void setTeamNumber(int value) {          this.teamNumber = value;}
@@ -97,5 +109,12 @@ public class Team {
 
     public boolean getAutoCypherb() {             return this.autoCypherb;}
     public void setAutoCypherb(boolean value) {   this.autoCypherb = value;}
+
+    public boolean getBalanceb() {                  return this.balanceb;}
+    public void setBalanceb(boolean value) {                     this.balanceb = value;}
+
+    public String getOtherNotes() {                return this.otherNotes;}
+    public void setOtherNotes(String value) {                   this.otherNotes=value;}
+
 
 }

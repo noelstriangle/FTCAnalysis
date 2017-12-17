@@ -36,6 +36,13 @@
                 android:value="com.javascouts.ftcanalysis.MainActivity" />
         </activity>
 
+        <activity android:name=".EditTeamActivity"
+            android:parentActivityName="com.javascouts.ftcanalysis.TeamDetailsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.javascouts.ftcanalysis.MainActivity" />
+        </activity>
+
     </application>
 
 </manifest>

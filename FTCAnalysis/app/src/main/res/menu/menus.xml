@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item
+        android:id="@+id/navButton"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        app:showAsAction="always" />
+
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         app:showAsAction="never"/>
@@ -12,4 +17,9 @@
     <item android:id="@+id/action_export"
         android:title="@string/export"/>
 
+    <item android:id="@+id/action_deleteall"
+        android:title="@string/delete_all"/>
+
+    <item android:id="@+id/action_edit"
+        android:title="@string/edit_team_info"/>
 </menu>

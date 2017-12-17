@@ -1,21 +1,21 @@
 package com.javascouts.ftcanalysis;
 
 import android.arch.persistence.room.Room;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.WindowManager;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.EditText;
-import android.support.v7.app.ActionBar;
 import android.widget.Toast;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
-public class ScoutTeamActivity extends AppCompatActivity {
+public class EditTeamActivity extends AppCompatActivity {
 
     private SeekBar glyphBar, rowBar, columnBar, relicBar, relicZoneBar;
     private TextView glyphText, rowText, columnText, relicText, relicZoneText;
@@ -23,10 +23,11 @@ public class ScoutTeamActivity extends AppCompatActivity {
     private CheckBox jewel, glyphAuto, safeZone, autoCypher, endGameCypher, upright, balance;
 
     private boolean jewelb, glyphAutob, autoCypherb, safeZoneb, endGameCypherb, uprightb, balanceb;
-    private int glyphBari, rowBari, columnBari, relicBari, relicZoneBari, teamNumi;
+    private int glyphBari, rowBari, columnBari, relicBari, relicZoneBari, teamNumi, teamN;
     private String teamTexts;
     TeamDatabase db;
-    private Team tempTeam;
+    TeamDao dao;
+    private Team team, tempTeam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +42,11 @@ public class ScoutTeamActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         myToolbar.setTitleTextColor(android.graphics.Color.rgb(33,81,8));
 
+        teamN = getIntent().getIntExtra("TEAM_NUMBER", 0);
+
         ActionBar actionBar = getSupportActionBar();
 
-        actionBar.setTitle("Scout New Team");
+        actionBar.setTitle("Edit Team");
 
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -174,6 +177,8 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
+        addInfo(teamN);
+
     }
 
     @Override
@@ -216,7 +221,7 @@ public class ScoutTeamActivity extends AppCompatActivity {
                         @Override
                         public void run() {
 
-                            Toast toast = new Toast(ScoutTeamActivity.this).makeText(ScoutTeamActivity.this, "Team Number Unspecified", Toast.LENGTH_LONG);
+                            Toast toast = new Toast(EditTeamActivity.this).makeText(EditTeamActivity.this, "Team Number Unspecified", Toast.LENGTH_LONG);
                             toast.show();
 
                         }
@@ -273,7 +278,7 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
     public int changeBoolToInt(boolean value) {
 
-        if(value == TRUE) {
+        if(value) {
 
             return 1;
 
@@ -287,7 +292,7 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
     private static void addTeam(final TeamDatabase db, Team team) {
 
-        db.TeamDao().insertAll(team);
+        db.TeamDao().updateAll(team);
 
     }
 
@@ -296,7 +301,42 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
         super.onPause();
 
-        db.close();
+    }
+
+    public void addInfo(final int id) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                team = db.TeamDao().getTeam(id);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        teamText.setText(team.getTeamName());
+                        teamNum.setText(String.valueOf(team.getTeamNumber()));
+                        jewel.setChecked(team.getJewelb());
+                        glyphAuto.setChecked(team.getGlyphAutob());
+                        autoCypher.setChecked(team.getAutoCypherb());
+                        safeZone.setChecked(team.getSafeZoneb());
+                        glyphBar.setProgress(team.getGlyphBari());
+                        rowBar.setProgress(team.getRowBari());
+                        columnBar.setProgress(team.getColumnBari());
+                        endGameCypher.setChecked(team.getEndGameCypherb());
+                        relicBar.setProgress(team.getRelicBari());
+                        relicZoneBar.setProgress(team.getRelicZoneBari());
+                        upright.setChecked(team.getUprightb());
+                        balance.setChecked(team.getBalanceb());
+
+                    }
+                });
+
+            }
+        }).start();
+
+
 
     }
 

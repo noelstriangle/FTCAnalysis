@@ -7,4 +7,10 @@
     <string name="ok">Yeah, sure</string>
     <string name="no">I DIDNT MEAN TO</string>
     <string name="export">Export</string>
+    <string name="drawer_open">Open the Nav Drawer.</string>
+    <string name="drawer_close">Close the Nav Drawer.</string>
+    <string name="scout_team">Scouting</string>
+    <string name="match_analyse">Match Analysis</string>
+    <string name="delete_all">Delete All</string>
+    <string name="edit_team_info">Edit Team Info</string>
 </resources>

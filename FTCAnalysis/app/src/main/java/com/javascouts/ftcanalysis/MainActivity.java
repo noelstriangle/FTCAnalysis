@@ -4,8 +4,11 @@ import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Environment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public int[] teamNums;
     public String[] teamNames;
     public int[] teamAutos;
-    public int[] teamTeles;
+    public int[] teamTeles, teamIds;
     public int teamTotal;
 
     private TableLayout tbl;
@@ -44,9 +47,12 @@ public class MainActivity extends AppCompatActivity {
     public List<Team> teams;
     public Team tempTeam;
     public List<Team> resumeTeams;
+    public Team[] deleteTeams;
 
-    private boolean FIRST_RUN = true;
-
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private CharSequence mDrawerTitle;
+    private CharSequence mTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -68,6 +74,46 @@ public class MainActivity extends AppCompatActivity {
 
         myToolbar.setTitleTextColor(android.graphics.Color.rgb(33,81,8));
 
+        mTitle = mDrawerTitle = getTitle();
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.string.drawer_open, R.string.drawer_close) {
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        return true;
+
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,11 +121,17 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menus, menu);
         MenuItem toHide = menu.findItem(R.id.action_delete);
         toHide.setVisible(false);
+        MenuItem toHidef = menu.findItem(R.id.action_edit);
+        toHidef.setVisible(false);
         return true;
 
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
 
         switch(item.getItemId()){
 
@@ -118,6 +170,44 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog dialog = builder.create();
 
                 dialog.show();
+
+                break;
+
+            case R.id.action_deleteall:
+
+                AlertDialog.Builder deleteBuilder = new AlertDialog.Builder(this);
+
+                deleteBuilder.setTitle("Delete Database");
+
+                deleteBuilder.setMessage("Deleteing all the teams will delete all the teams. Maybe export before you do this? Understand?");
+
+                deleteBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                for(int i = numberOfTeams-1; i >= 0; i--) {
+
+                                    mDao.deleteAll(mDao.getTeam(teamIds[i]));
+
+                                }
+
+                            }
+                        }).start();
+
+                    }
+                });
+                deleteBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+
+                AlertDialog deleteDialog = deleteBuilder.create();
+
+                deleteDialog.show();
 
                 break;
 
@@ -167,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("INITIALIZATION/RESUMING", "STARTING FOR LOOP");
         for(int i = 0; i < numberOfTeams; i++) {
 
-            final int tN = teamNums[i];
+            final int tN = teamIds[i];
 
             TableRow tblrow = new TableRow(this);
 
@@ -233,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
                 resumeTeams = new ArrayList<>();
                 teams = new ArrayList<>();
 
-                teams = mDao.getAll();
+                teams = mDao.getAllAndSort();
                 numberOfTeams = teams.size();
 
                 Log.d("RESUMING", "numberOfTeams: " + String.valueOf(numberOfTeams));
@@ -242,6 +332,7 @@ public class MainActivity extends AppCompatActivity {
                 teamNames = new String[teams.size()];
                 teamAutos = new int[teams.size()];
                 teamTeles = new int[teams.size()];
+                teamIds = new int[teams.size()];
 
                 Log.d("RESUMING", "Arrays Created.");
 
@@ -249,6 +340,7 @@ public class MainActivity extends AppCompatActivity {
 
                     tempTeam = teams.get(i);
 
+                    teamIds[i] = tempTeam.getId();
                     teamNums[i] = tempTeam.getTeamNumber();
                     teamNames[i] = tempTeam.getTeamName();
                     teamAutos[i] = tempTeam.getAutoPoints();

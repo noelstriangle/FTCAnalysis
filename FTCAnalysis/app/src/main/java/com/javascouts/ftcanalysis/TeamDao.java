@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.javascouts.ftcanalysis.Team;
 
@@ -19,24 +20,17 @@ public interface TeamDao {
     @Query("SELECT * FROM team")
     List<Team> getAll();
 
-    @Query("SELECT teamNumber from team ORDER BY teamNumber")
-    int[] getTeamNumbers();
+    @Query("SELECT * FROM team ORDER BY team_number")
+    List<Team> getAllAndSort();
 
-    @Query("SELECT team_name from team ORDER BY teamNumber")
-    String[] getTeamNames();
-
-    @Query("SELECT auto_points from team ORDER BY teamNumber")
-    int[] getAutoPoints();
-
-    @Query("SELECT tele_points from team ORDER BY teamNumber")
-    int[] getTelePoints();
-
-    @Query("SELECT * FROM team WHERE teamNumber = :teamNumber")
-    Team getTeam(int teamNumber);
+    @Query("SELECT * FROM team WHERE id = :id")
+    Team getTeam(int id);
 
     @Insert
     void insertAll(Team... teams);
 
+    @Update
+    void updateAll(Team... teams);
     @Delete
     void deleteAll(Team... teams);
 

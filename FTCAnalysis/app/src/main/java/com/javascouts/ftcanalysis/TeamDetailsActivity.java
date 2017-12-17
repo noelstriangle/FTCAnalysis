@@ -3,6 +3,7 @@ package com.javascouts.ftcanalysis;
 import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +45,12 @@ public class TeamDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstnceState);
         setContentView(R.layout.activity_team_details);
 
+    }
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
         llayout = findViewById(R.id.llayout);
 
         teamN = getIntent().getIntExtra("TEAM_NUMBER", 0);
@@ -68,8 +76,10 @@ public class TeamDetailsActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menus, menu);
-        MenuItem toHide = menu.findItem(R.id.action_export);
-        toHide.setVisible(false);
+        MenuItem toHide1 = menu.findItem(R.id.action_export);
+        toHide1.setVisible(false);
+        MenuItem toHide2 = menu.findItem(R.id.action_deleteall);
+        toHide2.setVisible(false);
         return true;
     }
 
@@ -121,6 +131,13 @@ public class TeamDetailsActivity extends AppCompatActivity {
                 NavUtils.navigateUpFromSameTask(this);
 
                 break;
+
+            case R.id.action_edit:
+
+                editTeamDetails(teamN);
+
+                break;
+
 
         }
 
@@ -308,6 +325,15 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         super.onPause();
         mDb.close();
+        llayout.removeAllViews();
+
+    }
+
+    public void editTeamDetails(int teamId) {
+
+        Intent intent = new Intent(this, EditTeamActivity.class);
+        intent.putExtra("TEAM_NUMBER", teamId);
+        startActivity(intent);
 
     }
 
