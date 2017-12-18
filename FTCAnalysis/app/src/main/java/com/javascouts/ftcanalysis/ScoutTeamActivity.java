@@ -19,12 +19,12 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
     private SeekBar glyphBar, rowBar, columnBar, relicBar, relicZoneBar;
     private TextView glyphText, rowText, columnText, relicText, relicZoneText;
-    private EditText teamText, teamNum;
+    private EditText teamText, teamNum, description;
     private CheckBox jewel, glyphAuto, safeZone, autoCypher, endGameCypher, upright, balance;
 
     private boolean jewelb, glyphAutob, autoCypherb, safeZoneb, endGameCypherb, uprightb, balanceb;
     private int glyphBari, rowBari, columnBari, relicBari, relicZoneBari, teamNumi;
-    private String teamTexts;
+    private String teamTexts, teamInfos;
     TeamDatabase db;
     private Team tempTeam;
 
@@ -61,6 +61,7 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
         teamText = findViewById(R.id.teamName);
         teamNum = findViewById(R.id.teamNumber);
+        description = findViewById(R.id.description);
 
         glyphBar = findViewById(R.id.glyphBar);
         glyphBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -209,6 +210,7 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
                     teamTexts = teamText.getText().toString();
                     teamNumi = Integer.valueOf(teamNum.getText().toString());
+                    teamInfos = description.getText().toString();
 
                 } catch(NumberFormatException e) {
 
@@ -254,6 +256,7 @@ public class ScoutTeamActivity extends AppCompatActivity {
                 tempTeam.setRelicZoneBari(relicZoneBari);
                 tempTeam.setUprightb(uprightb);
                 tempTeam.setBalanceb(balanceb);
+                tempTeam.setOtherNotes(teamInfos);
 
                 tempTeam.setAutoPoints((changeBoolToInt(jewelb) * 30) + (changeBoolToInt(glyphAutob) * 15) + (changeBoolToInt(autoCypherb) * 30) + (changeBoolToInt(safeZoneb) * 10));
                 tempTeam.setTelePoints((glyphBari * 2) + (rowBari * 10) + (columnBari * 20) +

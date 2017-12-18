@@ -1,6 +1,7 @@
 package com.javascouts.ftcanalysis;
 
 import android.arch.persistence.room.Room;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +20,7 @@ public class EditTeamActivity extends AppCompatActivity {
 
     private SeekBar glyphBar, rowBar, columnBar, relicBar, relicZoneBar;
     private TextView glyphText, rowText, columnText, relicText, relicZoneText;
-    private EditText teamText, teamNum;
+    private EditText teamText, teamNum, description;
     private CheckBox jewel, glyphAuto, safeZone, autoCypher, endGameCypher, upright, balance;
 
     private boolean jewelb, glyphAutob, autoCypherb, safeZoneb, endGameCypherb, uprightb, balanceb;
@@ -64,6 +65,7 @@ public class EditTeamActivity extends AppCompatActivity {
 
         teamText = findViewById(R.id.teamName);
         teamNum = findViewById(R.id.teamNumber);
+        description = findViewById(R.id.description);
 
         glyphBar = findViewById(R.id.glyphBar);
         glyphBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -259,12 +261,13 @@ public class EditTeamActivity extends AppCompatActivity {
                 tempTeam.setRelicZoneBari(relicZoneBari);
                 tempTeam.setUprightb(uprightb);
                 tempTeam.setBalanceb(balanceb);
+                tempTeam.setOtherNotes(description.getText().toString());
 
                 tempTeam.setAutoPoints((changeBoolToInt(jewelb) * 30) + (changeBoolToInt(glyphAutob) * 15) + (changeBoolToInt(autoCypherb) * 30) + (changeBoolToInt(safeZoneb) * 10));
                 tempTeam.setTelePoints((glyphBari * 2) + (rowBari * 10) + (columnBari * 20) +
                         (changeBoolToInt(endGameCypherb) * 30) + (relicBari * (10 * (2 ^ relicZoneBari - 1)) + (changeBoolToInt(uprightb) * 15)) + (changeBoolToInt(balanceb) * 20));
 
-                addTeam(db, tempTeam);
+                addTeam(db, tempTeam, teamN);
 
             }
 
@@ -273,6 +276,8 @@ public class EditTeamActivity extends AppCompatActivity {
         TeamDatabase.destroyInstance();
 
         finish();
+
+        navigateUpTo(new Intent(this, MainActivity.class));
 
     }
 
@@ -290,10 +295,10 @@ public class EditTeamActivity extends AppCompatActivity {
 
     }
 
-    private static void addTeam(final TeamDatabase db, Team team) {
+    private static void addTeam(final TeamDatabase db, Team team, int todelete) {
 
-        db.TeamDao().updateAll(team);
-
+        db.TeamDao().deleteAll(db.TeamDao().getTeam(todelete));
+        db.TeamDao().insertAll(team);
     }
 
     @Override
@@ -329,6 +334,7 @@ public class EditTeamActivity extends AppCompatActivity {
                         relicZoneBar.setProgress(team.getRelicZoneBari());
                         upright.setChecked(team.getUprightb());
                         balance.setChecked(team.getBalanceb());
+
 
                     }
                 });

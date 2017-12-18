@@ -406,10 +406,11 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="152dp"
             android:onClick="getInfoAndKill"
             android:text="Finish Team"
             app2:layout_constraintEnd_toEndOf="parent"
+            app2:layout_constraintHorizontal_bias="0.502"
             app2:layout_constraintStart_toStartOf="parent"
             app2:layout_constraintTop_toBottomOf="@+id/upright"
             app:layout_constraintHorizontal_bias="0.498"
@@ -443,7 +444,19 @@
             app2:layout_constraintStart_toStartOf="parent"
             app2:layout_constraintTop_toBottomOf="@+id/upright" />
 
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:hint="Description"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app2:layout_constraintStart_toStartOf="parent"
+            app2:layout_constraintTop_toBottomOf="@+id/endBalance" />
+
 
     </android.support.constraint.ConstraintLayout>
 
-    </ScrollView>
+</ScrollView>

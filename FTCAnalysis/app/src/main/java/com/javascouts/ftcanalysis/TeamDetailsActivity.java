@@ -35,7 +35,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
     private Team toDelete;
     private Team tempTeam;
-    private String teamName;
+    private String teamName, teamInfo;
     private boolean canJewel, canGlyphAuto, canCypher, canSafeZone, canCypherEndgame, canUpright;
     private int teamNumber, glyphs, rows, columns, relics, relicZone, autoPoints, telePoints;
 
@@ -175,6 +175,8 @@ public class TeamDetailsActivity extends AppCompatActivity {
                 relicZone = tempTeam.getRelicZoneBari();
                 autoPoints = tempTeam.getAutoPoints();
                 telePoints = tempTeam.getTelePoints();
+                teamInfo = tempTeam.getOtherNotes();
+
                 Log.d("DETAILCREATION", "Team info all received.");
 
                 runOnUiThread(new Runnable() {
@@ -198,112 +200,129 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
     public void initUi() {
 
+        int x = 16;
+
         TextView teamNameText = new TextView(this);
         teamNameText.setText(teamName);
         teamNameText.setTextSize(32);
-        teamNameText.setTop(0);
+        teamNameText.setTop(0 * x);
         teamNameText.setTextColor(android.graphics.Color.rgb(33,81,8));
         teamNameText.setGravity(Gravity.CENTER);
 
         TextView teamNumText = new TextView(this);
         teamNumText.setText(String.valueOf(teamNumber));
         teamNumText.setTextSize(24);
-        teamNumText.setTop(36);
+        teamNumText.setTop(1 * x);
         teamNumText.setTextColor(android.graphics.Color.rgb(33,81,8));
         teamNumText.setGravity(Gravity.CENTER);
 
+        TextView autonomous = new TextView(this);
+        autonomous.setText("Autonomous:");
+        autonomous.setTextSize(16);
+        autonomous.setTop(2 * x);
+        autonomous.setTextColor(android.graphics.Color.rgb(33,81,8));
+        autonomous.setGravity(Gravity.START);
+
         TextView canJewelText = new TextView(this);
-        canJewelText.setText(returnCanOrCant(canJewel) + " knock the correct jewel off.");
+        canJewelText.setText("- " + returnCanOrCant(canJewel) + " knock the correct jewel off.");
         canJewelText.setTextSize(16);
-        canJewelText.setTop(72);
-        canJewelText.setLeft(16);
+        canJewelText.setTop(3 * x);
         canJewelText.setTextColor(android.graphics.Color.rgb(33,81,8));
         canJewelText.setGravity(Gravity.START);
 
         TextView canGlyphAutoText = new TextView(this);
-        canGlyphAutoText.setText(returnCanOrCant(canGlyphAuto) + " place the glyph in the box.");
+        canGlyphAutoText.setText("- " + returnCanOrCant(canGlyphAuto) + " place the glyph in the box.");
         canGlyphAutoText.setTextSize(16);
-        canGlyphAutoText.setTop(90);
-        canGlyphAutoText.setLeft(16);
+        canGlyphAutoText.setTop(4 * x);
         canGlyphAutoText.setTextColor(android.graphics.Color.rgb(33,81,8));
         canGlyphAutoText.setGravity(Gravity.START);
 
         TextView canAutoCypherText = new TextView(this);
-        canAutoCypherText.setText(returnCanOrCant(canCypher) + " place the glyph in the correct column.");
+        canAutoCypherText.setText("- " + returnCanOrCant(canCypher) + " place the glyph in the correct column.");
         canAutoCypherText.setTextSize(16);
-        canAutoCypherText.setTop(108);
-        canAutoCypherText.setLeft(16);
+        canAutoCypherText.setTop(5 * x);
         canAutoCypherText.setTextColor(android.graphics.Color.rgb(33,81,8));
         canAutoCypherText.setGravity(Gravity.START);
 
         TextView canSafeZoneText = new TextView(this);
-        canSafeZoneText.setText(returnCanOrCant(canSafeZone) + " park in the safe zone.");
+        canSafeZoneText.setText("- " + returnCanOrCant(canSafeZone) + " park in the safe zone.");
         canSafeZoneText.setTextSize(16);
-        canSafeZoneText.setTop(126);
-        canSafeZoneText.setLeft(16);
+        canSafeZoneText.setTop(6 * x);
         canSafeZoneText.setTextColor(android.graphics.Color.rgb(33,81,8));
         canSafeZoneText.setGravity(Gravity.START);
 
+        TextView teleop = new TextView(this);
+        teleop.setText("Teleop:");
+        teleop.setTextSize(16);
+        teleop.setTop(7 * x);
+        teleop.setTextColor(android.graphics.Color.rgb(33,81,8));
+        teleop.setGravity(Gravity.START);
+
         TextView glyphText = new TextView(this);
-        glyphText.setText("Can score " + String.valueOf(glyphs) + " glyphs.");
+        glyphText.setText("- Can score " + String.valueOf(glyphs) + " glyphs.");
         glyphText.setTextSize(16);
-        glyphText.setTop(126);
-        glyphText.setLeft(16);
+        glyphText.setTop(8 * x);
         glyphText.setTextColor(android.graphics.Color.rgb(33,81,8));
         glyphText.setGravity(Gravity.START);
 
         TextView rowText = new TextView(this);
-        rowText.setText("Can make " + String.valueOf(rows) + " full rows.");
+        rowText.setText("- Can make " + String.valueOf(rows) + " full rows.");
         rowText.setTextSize(16);
-        rowText.setTop(144);
-        rowText.setLeft(16);
+        rowText.setTop(9 * x);
         rowText.setTextColor(android.graphics.Color.rgb(33,81,8));
         rowText.setGravity(Gravity.START);
 
         TextView columnText = new TextView(this);
-        columnText.setText("Can make " + String.valueOf(columns) + " full columns.");
+        columnText.setText("- Can make " + String.valueOf(columns) + " full columns.");
         columnText.setTextSize(16);
-        columnText.setTop(162);
-        columnText.setLeft(16);
+        columnText.setTop(10 * x);
         columnText.setTextColor(android.graphics.Color.rgb(33,81,8));
         columnText.setGravity(Gravity.START);
 
         TextView relicText = new TextView(this);
-        relicText.setText("Can place " + String.valueOf(relics) + " relics.");
+        relicText.setText("- Can place " + String.valueOf(relics) + " relics.");
         relicText.setTextSize(16);
-        relicText.setTop(180);
-        relicText.setLeft(16);
+        relicText.setTop(11 * x);
         relicText.setTextColor(android.graphics.Color.rgb(33,81,8));
         relicText.setGravity(Gravity.START);
 
         TextView relicZoneText = new TextView(this);
-        relicZoneText.setText("Can place the relics in zone " + String.valueOf(relicZone) + ".");
+        relicZoneText.setText("- Can place the relics in zone " + String.valueOf(relicZone) + ".");
         relicZoneText.setTextSize(16);
-        relicZoneText.setTop(198);
-        relicZoneText.setLeft(16);
+        relicZoneText.setTop(12 * x);
         relicZoneText.setTextColor(android.graphics.Color.rgb(33,81,8));
         relicZoneText.setGravity(Gravity.START);
 
         TextView uprightText = new TextView(this);
-        uprightText.setText(returnCanOrCant(canUpright) + " place the relics upright.");
+        uprightText.setText("- " + returnCanOrCant(canUpright) + " place the relics upright.");
         uprightText.setTextSize(16);
-        uprightText.setTop(214);
-        uprightText.setLeft(16);
+        uprightText.setTop(13 * x);
         uprightText.setTextColor(android.graphics.Color.rgb(33,81,8));
         uprightText.setGravity(Gravity.START);
 
+        TextView infoText = new TextView(this);
+        infoText.setText("Other notes: " + teamInfo);
+        infoText.setTextSize(16);
+        infoText.setTop(14 * x);
+        infoText.setTextColor(android.graphics.Color.rgb(33,81,8));
+        infoText.setGravity(Gravity.START);
+
         llayout.addView(teamNameText);
         llayout.addView(teamNumText);
+        llayout.addView(autonomous);
         llayout.addView(canJewelText);
         llayout.addView(canGlyphAutoText);
         llayout.addView(canAutoCypherText);
         llayout.addView(canSafeZoneText);
+        llayout.addView(teleop);
         llayout.addView(glyphText);
         llayout.addView(rowText);
         llayout.addView(columnText);
         llayout.addView(relicText);
         llayout.addView(relicZoneText);
         llayout.addView(uprightText);
+        llayout.addView(infoText);
+
 
     }
 

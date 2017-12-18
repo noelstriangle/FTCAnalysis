@@ -31,6 +31,7 @@ public interface TeamDao {
 
     @Update
     void updateAll(Team... teams);
+
     @Delete
     void deleteAll(Team... teams);
 
