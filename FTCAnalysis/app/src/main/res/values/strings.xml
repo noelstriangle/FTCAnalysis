@@ -13,4 +13,7 @@
     <string name="match_analyse">Match Analysis</string>
     <string name="delete_all">Delete All</string>
     <string name="edit_team_info">Edit Team Info</string>
+    <string name="match_analysis">Match Analysis</string>
+    <string name="java_scouting">Java Scouting</string>
+    <string name="spacer" />
 </resources>
