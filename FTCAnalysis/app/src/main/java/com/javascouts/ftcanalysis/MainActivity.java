@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.drm.DrmStore;
 import android.os.Environment;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,10 +20,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.opencsv.CSVWriter;
 
@@ -43,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     public int[] teamAutos;
     public int[] teamTeles, teamIds;
     public int teamTotal;
+    public Intent intent;
 
     private TableLayout tbl;
 
@@ -73,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
+
+        Intent intent = getIntent();
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -137,6 +145,23 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (mDrawerToggle.onOptionsItemSelected(item)) {
+
+            switch (item.getItemId()) {
+
+                case R.id.scoutTeam:
+
+                    new Toast(this).setText("Already in Scouting");
+
+                    break;
+
+                case R.id.matchAnalysis:
+
+                    new Intent(this, MatchAnalyseActivity.class);
+
+                    break;
+
+            }
+
             return true;
         }
 

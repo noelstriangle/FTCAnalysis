@@ -81,8 +81,6 @@
                 </LinearLayout>
             </HorizontalScrollView>
         </ScrollView>
-
-
     </android.support.constraint.ConstraintLayout>
 
     <android.support.design.widget.NavigationView
@@ -92,26 +90,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:menu="@menu/navigation"
+        app:headerLayout="@layout/activity_drawer_header"
         app:itemTextColor="@color/textColor">
-        
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:id="@+id/navView"
-            android:orientation="horizontal"
-            android:elevation="4dp"
-            android:background="@color/colorPrimary">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/java_scouting"
-                android:textSize="24sp"
-                android:textColor="@color/textColor"
-                android:layout_gravity="center"/>
-
-        </LinearLayout>
 
     </android.support.design.widget.NavigationView>
 
