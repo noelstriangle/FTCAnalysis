@@ -406,7 +406,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="152dp"
+            android:layout_marginTop="170dp"
             android:onClick="getInfoAndKill"
             android:text="Finish Team"
             app2:layout_constraintEnd_toEndOf="parent"
@@ -455,6 +455,19 @@
             android:inputType="textPersonName"
             app2:layout_constraintStart_toStartOf="parent"
             app2:layout_constraintTop_toBottomOf="@+id/endBalance" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:onClick="selectPic"
+            android:text="Take A Picture"
+            app2:layout_constraintEnd_toEndOf="parent"
+            app2:layout_constraintStart_toStartOf="parent"
+            app2:layout_constraintTop_toBottomOf="@+id/description" />
 
 
     </android.support.constraint.ConstraintLayout>

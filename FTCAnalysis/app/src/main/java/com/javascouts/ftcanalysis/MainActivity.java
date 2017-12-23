@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.drm.DrmStore;
+import android.media.Image;
 import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TableLayout;
@@ -326,8 +328,8 @@ public class MainActivity extends AppCompatActivity {
             tv3.setGravity(Gravity.CENTER);
             tblrow.addView(tv3);
             Log.d("INITIALIZATION/RESUMING", "TEXT 3(" + String.valueOf(teamTotal) + ") added.");
-            Button button = new Button(this);
-            button.setText("");
+            ImageButton button = new ImageButton(this);
+            button.setImageResource(R.mipmap.no_image);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

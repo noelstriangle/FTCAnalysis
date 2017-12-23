@@ -17,5 +17,5 @@
     <string name="java_scouting">Java Scouting</string>
     <string name="spacer" />
     <string name="dashes">-------------------------------</string>
-    <string name="add_image">Add Image</string>
+    <string name="add_image">Set Image</string>
 </resources>

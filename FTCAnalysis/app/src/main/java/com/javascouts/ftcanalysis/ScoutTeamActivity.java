@@ -1,16 +1,33 @@
 package com.javascouts.ftcanalysis;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.arch.persistence.room.Room;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.support.v7.app.ActionBar;
 import android.widget.Toast;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -27,7 +44,12 @@ public class ScoutTeamActivity extends AppCompatActivity {
     private String teamTexts, teamInfos;
     TeamDatabase db;
     private Team tempTeam;
+    private static final int SELECT_PHOTO = 100;
+    private InputStream imageStream;
+    private Bitmap image;
 
+    private Animator mCurrentAnimator;
+    private int mShortAnimationDuration;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -198,6 +220,12 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
     }
 
+    public void selectPic(View view) {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+    }
+
     public void getInfoAndKill(android.view.View view) {
 
         new Thread(new Runnable() {
@@ -257,6 +285,11 @@ public class ScoutTeamActivity extends AppCompatActivity {
                 tempTeam.setUprightb(uprightb);
                 tempTeam.setBalanceb(balanceb);
                 tempTeam.setOtherNotes(teamInfos);
+                try {
+                    tempTeam.setImage(getBytes(image));
+                } catch(NullPointerException e) {
+                    tempTeam.setImage(getBytes(BitmapFactory.decodeResource(getResources(), R.mipmap.no_image)));
+                }
 
                 tempTeam.setAutoPoints((changeBoolToInt(jewelb) * 30) + (changeBoolToInt(glyphAutob) * 15) + (changeBoolToInt(autoCypherb) * 30) + (changeBoolToInt(safeZoneb) * 10));
                 tempTeam.setTelePoints((glyphBari * 2) + (rowBari * 10) + (columnBari * 20) +
@@ -271,6 +304,59 @@ public class ScoutTeamActivity extends AppCompatActivity {
         TeamDatabase.destroyInstance();
 
         finish();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch(requestCode) {
+            case SELECT_PHOTO:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    try {
+                        imageStream = getContentResolver().openInputStream(selectedImage);
+                    } catch(FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        image = decodeUri(selectedImage);
+                    } catch(FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+        }
+
+    }
+
+    private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
+
+        // Decode image size
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o);
+
+        // The new size we want to scale to
+        final int REQUIRED_SIZE = 520;
+
+        // Find the correct scale value. It should be the power of 2.
+        int width_tmp = o.outWidth, height_tmp = o.outHeight;
+        int scale = 1;
+        while (true) {
+            if (width_tmp / 2 < REQUIRED_SIZE
+                    || height_tmp / 2 < REQUIRED_SIZE) {
+                break;
+            }
+            width_tmp /= 2;
+            height_tmp /= 2;
+            scale *= 2;
+        }
+
+        // Decode with inSampleSize
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        return BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o2);
 
     }
 
@@ -301,6 +387,23 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
         db.close();
 
+    }
+
+    public static byte[] getBytes(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        return stream.toByteArray();
+    }
+
+    // convert from byte array to bitmap
+    public Bitmap getImage(byte[] image) {
+        try {
+            return BitmapFactory.decodeByteArray(image, 0, image.length);
+        } catch(NullPointerException e) {
+            Bitmap b = BitmapFactory.decodeResource(this.getResources(),
+                    R.mipmap.no_image);
+            return b;
+        }
     }
 
 }
