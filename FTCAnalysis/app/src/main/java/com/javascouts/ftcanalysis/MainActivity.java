@@ -24,6 +24,8 @@ import android.widget.TextView;
 
 import com.opencsv.CSVWriter;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -274,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
             tblrow.addView(tv1);
             Log.d("INITIALIZATION/RESUMING", "TEXT 1(" + String.valueOf(teamNums[i]) + ") added.");
             TextView tv2 = new TextView(this);
-            tv2.setText(String.valueOf(teamNames[i]));
+            tv2.setText(String.valueOf(shortenText(teamNames[i])));
             tv2.setTextColor(android.graphics.Color.rgb(33,81,8));
             tv2.setGravity(Gravity.CENTER);
             tblrow.addView(tv2);
@@ -298,6 +300,20 @@ public class MainActivity extends AppCompatActivity {
             tblrow.addView(button);
             tbl.addView(tblrow);
             Log.d("INITIALIZATION/RESUMING", "TableRow added to Tabel.");
+
+        }
+
+    }
+    public String shortenText(String s) {
+
+        if (s.length() > 12) {
+
+            s = StringUtils.abbreviate(s, 15);
+            return s;
+
+        } else {
+
+            return s;
 
         }
 
