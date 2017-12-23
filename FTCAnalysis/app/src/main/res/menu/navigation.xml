@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <item
+        android:id="@+id/scoutTeam"
         android:checkable="false"
         android:title="@string/scout_team" />
+
+    <item
+        android:id="@+id/matchAnalysis"
+        android:title="@string/match_analysis" />
+
 </menu>

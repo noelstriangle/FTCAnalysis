@@ -6,8 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.drm.DrmStore;
 import android.os.Environment;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,10 +20,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.opencsv.CSVWriter;
 
@@ -43,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     public int[] teamAutos;
     public int[] teamTeles, teamIds;
     public int teamTotal;
+    public Intent intent;
 
     private TableLayout tbl;
 
@@ -74,6 +82,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
 
+        Intent intent = getIntent();
+
+        ActionBar actionBar = getSupportActionBar();
+
+        actionBar.setTitle("Scouting");
+
         myToolbar.setTitleTextColor(android.graphics.Color.rgb(33,81,8));
 
         mTitle = mDrawerTitle = getTitle();
@@ -84,17 +98,18 @@ public class MainActivity extends AppCompatActivity {
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getActionBar().setTitle(mTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
     }
 
@@ -132,6 +147,23 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (mDrawerToggle.onOptionsItemSelected(item)) {
+
+            switch (item.getItemId()) {
+
+                case R.id.scoutTeam:
+
+                    new Toast(this).setText("Already in Scouting");
+
+                    break;
+
+                case R.id.matchAnalysis:
+
+                    new Intent(this, MatchAnalyseActivity.class);
+
+                    break;
+
+            }
+
             return true;
         }
 
@@ -195,6 +227,13 @@ public class MainActivity extends AppCompatActivity {
                                     mDao.deleteAll(mDao.getTeam(teamIds[i]));
 
                                 }
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        recreate();
+                                    }
+                                });
 
                             }
                         }).start();
