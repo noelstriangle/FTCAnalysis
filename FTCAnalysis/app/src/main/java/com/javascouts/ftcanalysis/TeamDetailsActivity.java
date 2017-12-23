@@ -368,7 +368,8 @@ public class TeamDetailsActivity extends AppCompatActivity {
         llayout.addView(relicZoneText);
         llayout.addView(uprightText);
         llayout.addView(infoText);
-
+        llayout.addView(addImageButton);
+        llayout.addView(imageView);
 
     }
 
