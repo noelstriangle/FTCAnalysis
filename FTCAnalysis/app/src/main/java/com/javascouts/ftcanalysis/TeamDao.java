@@ -8,6 +8,7 @@ import android.arch.persistence.room.Update;
 
 import com.javascouts.ftcanalysis.Team;
 
+import java.sql.Blob;
 import java.util.List;
 
 /**
@@ -25,6 +26,9 @@ public interface TeamDao {
 
     @Query("SELECT * FROM team WHERE id = :id")
     Team getTeam(int id);
+
+    @Query("SELECT image FROM team WHERE id = :id")
+    byte[] getImage(int id);
 
     @Insert
     void insertAll(Team... teams);

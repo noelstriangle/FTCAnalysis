@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -13,10 +16,18 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.app.ActionBar;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * Created by Liam on 12/9/2017.
@@ -38,6 +49,11 @@ public class TeamDetailsActivity extends AppCompatActivity {
     private String teamName, teamInfo;
     private boolean canJewel, canGlyphAuto, canCypher, canSafeZone, canCypherEndgame, canUpright;
     private int teamNumber, glyphs, rows, columns, relics, relicZone, autoPoints, telePoints;
+
+    private static final int SELECT_PHOTO = 100;
+
+    private InputStream imageStream;
+    private Bitmap image;
 
     @Override
     protected void onCreate(Bundle savedInstnceState) {
@@ -145,7 +161,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
     }
 
-    public void init(final int teamNum) {
+    private void init(final int teamNum) {
 
         new Thread(new Runnable() {
             @Override
@@ -198,7 +214,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    public void initUi() {
+    private void initUi() {
 
         int x = 16;
 
@@ -307,6 +323,36 @@ public class TeamDetailsActivity extends AppCompatActivity {
         infoText.setTextColor(android.graphics.Color.rgb(33,81,8));
         infoText.setGravity(Gravity.START);
 
+        Button addImageButton = new Button(this);
+        addImageButton.setText(R.string.add_image);
+        addImageButton.setTop(16 * x);
+        addImageButton.setLeft(16);
+        addImageButton.setWidth(WRAP_CONTENT);
+        addImageButton.setHeight(WRAP_CONTENT);
+        addImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+
+            }
+        });
+
+        ImageView imageView = new ImageView(this);
+
+        try {
+            imageView.setImageBitmap(image);
+        } catch(NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        imageView.setMaxHeight(140);
+        imageView.setMaxWidth(140);
+        imageView.setLeft(16);
+        imageView.setTop(17 * x);
+
         llayout.addView(teamNameText);
         llayout.addView(teamNumText);
         llayout.addView(autonomous);
@@ -326,7 +372,59 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
     }
 
-    public String returnCanOrCant(boolean b) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch(requestCode) {
+            case SELECT_PHOTO:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    try {
+                        imageStream = getContentResolver().openInputStream(selectedImage);
+                    } catch(FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        image = decodeUri(selectedImage);
+                    } catch(FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+        }
+    }
+
+    private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
+
+        // Decode image size
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o);
+
+        // The new size we want to scale to
+        final int REQUIRED_SIZE = 140;
+
+        // Find the correct scale value. It should be the power of 2.
+        int width_tmp = o.outWidth, height_tmp = o.outHeight;
+        int scale = 1;
+        while (true) {
+            if (width_tmp / 2 < REQUIRED_SIZE
+                    || height_tmp / 2 < REQUIRED_SIZE) {
+                break;
+            }
+            width_tmp /= 2;
+            height_tmp /= 2;
+            scale *= 2;
+        }
+
+        // Decode with inSampleSize
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        return BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage), null, o2);
+
+    }
+
+    private String returnCanOrCant(boolean b) {
 
         if(b) {
 
@@ -348,7 +446,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
     }
 
-    public void editTeamDetails(int teamId) {
+    private void editTeamDetails(int teamId) {
 
         Intent intent = new Intent(this, EditTeamActivity.class);
         intent.putExtra("TEAM_NUMBER", teamId);

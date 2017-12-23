@@ -5,6 +5,8 @@ package com.javascouts.ftcanalysis;
  */
 import android.arch.persistence.room.*;
 
+import java.sql.Blob;
+
 @Entity(tableName = "team")
 public class Team {
 
@@ -62,6 +64,9 @@ public class Team {
     @ColumnInfo(name="other_notes")
     private String otherNotes;
 
+    @ColumnInfo(name="image")
+    private byte[] image;
+
     public int getId() {                            return this.id;}
     public void setId(int value) {                  this.id = value;}
 
@@ -115,6 +120,9 @@ public class Team {
 
     public String getOtherNotes() {                return this.otherNotes;}
     public void setOtherNotes(String value) {                   this.otherNotes=value;}
+
+    public byte[] getImage() {                        return this.image;}
+    public void setImage(byte[] value) {                            this.image = value;}
 
 
 }
