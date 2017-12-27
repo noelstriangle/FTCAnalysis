@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.drm.DrmStore;
 import android.media.Image;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -22,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -64,7 +66,10 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle;
+    private String[] mDrawerList;
+    private ListView mDrawerListView;
     private CharSequence mTitle;
+    private NavigationView navigation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -85,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         Intent intent = getIntent();
+
+        navigation = findViewById(R.id.navigation);
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -112,6 +119,32 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch(item.getItemId()) {
+
+                    case R.id.scoutTeam:
+
+                        new Toast(MainActivity.this).makeText(MainActivity.this, "Already in Scouting", Toast.LENGTH_LONG).show();
+
+                        break;
+
+                    case R.id.matchAnalysis:
+
+                        Intent fadjk = new Intent(MainActivity.this, MatchAnalyseActivity.class);
+                        startActivity(fadjk);
+
+
+                    break;
+
+                }
+
+                return true;
+            }
+        });
 
     }
 
@@ -150,23 +183,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (mDrawerToggle.onOptionsItemSelected(item)) {
 
-            switch (item.getItemId()) {
-
-                case R.id.scoutTeam:
-
-                    new Toast(this).setText("Already in Scouting");
-
-                    break;
-
-                case R.id.matchAnalysis:
-
-                    new Intent(this, MatchAnalyseActivity.class);
-
-                    break;
-
-            }
-
             return true;
+
         }
 
         switch(item.getItemId()){

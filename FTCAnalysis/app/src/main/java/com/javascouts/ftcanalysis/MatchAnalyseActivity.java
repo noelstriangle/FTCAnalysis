@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 /**
@@ -25,6 +30,9 @@ public class MatchAnalyseActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
+    private String[] mDrawerList;
+    private ListView mDrawerListView;
+    private NavigationView navigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +46,8 @@ public class MatchAnalyseActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+        navigation = findViewById(R.id.navigation);
 
         mTitle = mDrawerTitle = getTitle();
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -57,7 +67,29 @@ public class MatchAnalyseActivity extends AppCompatActivity {
             }
         };
 
+        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
+                switch(item.getItemId()) {
+
+                    case R.id.scoutTeam:
+
+                        new Intent(MatchAnalyseActivity.this, MainActivity.class);
+
+                        break;
+
+                    case R.id.matchAnalysis:
+
+                        new Toast(MatchAnalyseActivity.this).makeText(MatchAnalyseActivity.this, "Already in Scouting", Toast.LENGTH_LONG);
+
+                        break;
+
+                }
+
+                return true;
+            }
+        });
     }
 
     @Override
@@ -100,22 +132,9 @@ public class MatchAnalyseActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (mDrawerToggle.onOptionsItemSelected(item)) {
-            switch (item.getItemId()) {
 
-                case R.id.scoutTeam:
-
-                    new Toast(this).setText("Already in Scouting");
-
-                    break;
-
-                case R.id.matchAnalysis:
-
-                    new Intent(this, MatchAnalyseActivity.class);
-
-                    break;
-
-            }
             return true;
+
         }
 
         switch(item.getItemId()){
