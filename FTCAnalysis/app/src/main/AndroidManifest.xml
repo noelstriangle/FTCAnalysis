@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.javascouts.ftcanalysis">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -10,52 +11,42 @@
         android:roundIcon="@mipmap/square_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
         <activity android:name=".MainActivity">
-
             <intent-filter>
-
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
-
             </intent-filter>
-
         </activity>
-
-        <activity android:name=".ScoutTeamActivity"
-            android:parentActivityName="com.javascouts.ftcanalysis.MainActivity">
+        <activity
+            android:name=".ScoutTeamActivity"
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.javascouts.ftcanalysis.MainActivity" />
         </activity>
-
-        <activity android:name=".TeamDetailsActivity"
-            android:parentActivityName="com.javascouts.ftcanalysis.MainActivity">
+        <activity
+            android:name=".TeamDetailsActivity"
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.javascouts.ftcanalysis.MainActivity" />
         </activity>
-
-        <activity android:name=".EditTeamActivity"
-            android:parentActivityName="com.javascouts.ftcanalysis.TeamDetailsActivity">
+        <activity
+            android:name=".EditTeamActivity"
+            android:parentActivityName=".TeamDetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.javascouts.ftcanalysis.MainActivity" />
         </activity>
-
         <activity android:name=".MatchAnalyseActivity">
-
             <intent-filter>
-
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.ALTERNATIVE" />
-
             </intent-filter>
-
-
-
         </activity>
-
+        <activity android:name=".FirstRunActivity"></activity>
     </application>
 
 </manifest>

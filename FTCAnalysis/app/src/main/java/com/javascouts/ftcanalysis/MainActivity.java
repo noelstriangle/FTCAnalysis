@@ -76,6 +76,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                .getBoolean("isFirstRun", true);
+
+        if (isFirstRun) {
+
+            startActivity(new Intent(MainActivity.this, FirstRunActivity.class));
+
+        }
+
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("isFirstRun", false).apply();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -347,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
             tblrow.addView(tv3);
             Log.d("INITIALIZATION/RESUMING", "TEXT 3(" + String.valueOf(teamTotal) + ") added.");
             ImageButton button = new ImageButton(this);
-            button.setImageResource(R.mipmap.no_image);
+            button.setImageResource(R.mipmap.ic_info_black_18dp);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
