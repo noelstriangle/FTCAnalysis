@@ -362,7 +362,7 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
     public int changeBoolToInt(boolean value) {
 
-        if(value == TRUE) {
+        if(value) {
 
             return 1;
 

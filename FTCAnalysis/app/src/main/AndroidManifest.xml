@@ -46,7 +46,10 @@
                 <category android:name="android.intent.category.ALTERNATIVE" />
             </intent-filter>
         </activity>
-        <activity android:name=".FirstRunActivity"></activity>
+        <activity
+            android:name=".FirstRunActivity"
+            android:label="@string/title_activity_first_run"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

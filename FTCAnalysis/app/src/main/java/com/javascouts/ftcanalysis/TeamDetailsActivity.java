@@ -76,6 +76,9 @@ public class TeamDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstnceState);
         setContentView(R.layout.activity_team_details);
 
+        toast1 = new Toast(this).makeText(this, "Delete Canceled.", Toast.LENGTH_LONG);
+        toast1.setText("Delete Canceled.");
+
         mShortAnimationDuration = getResources().getInteger(
                 android.R.integer.config_shortAnimTime);
 
@@ -93,9 +96,6 @@ public class TeamDetailsActivity extends AppCompatActivity {
         Log.d("TESTING", "Extra:" + String.valueOf(teamN) + " received.");
 
         init(teamN);
-
-        toast1 = new Toast(this).makeText(this, "Delete Canceled.", Toast.LENGTH_LONG);
-        toast1.setText("Delete Canceled.");
 
         Toolbar myToolbar = findViewById(R.id.toolbarTD);
         setSupportActionBar(myToolbar);

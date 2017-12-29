@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -40,6 +42,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -54,9 +57,10 @@ public class MainActivity extends AppCompatActivity {
     public int[] teamAutos;
     public int[] teamTeles, teamIds;
     public int teamTotal;
+    private ListView mListView;
     public Intent intent;
 
-    private TableLayout tbl;
+    private ListView tbl;
 
     public List<Team> teams;
     public Team tempTeam;
@@ -132,6 +136,65 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        final SwipeRefreshLayout srl = findViewById(R.id.swiperefresh);
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDb = Room.databaseBuilder(getApplicationContext(),
+                                TeamDatabase.class, "team-database").build();
+                        mDao = mDb.getTeamDao();
+
+                        Log.d("RESUMING", "Database Instantiated.");
+
+                        resumeTeams = new ArrayList<>();
+                        teams = new ArrayList<>();
+
+                        teams = mDao.getAllAndSort();
+                        numberOfTeams = teams.size();
+
+                        Log.d("RESUMING", "numberOfTeams: " + String.valueOf(numberOfTeams));
+
+                        teamNums = new int[teams.size()];
+                        teamNames = new String[teams.size()];
+                        teamAutos = new int[teams.size()];
+                        teamTeles = new int[teams.size()];
+                        teamIds = new int[teams.size()];
+
+                        Log.d("RESUMING", "Arrays Created.");
+
+                        for(int i = 0; i < numberOfTeams; i++) {
+
+                            tempTeam = teams.get(i);
+
+                            teamIds[i] = tempTeam.getId();
+                            teamNums[i] = tempTeam.getTeamNumber();
+                            teamNames[i] = tempTeam.getTeamName();
+                            teamAutos[i] = tempTeam.getAutoPoints();
+                            teamTeles[i] = tempTeam.getTelePoints();
+
+                            Log.d("RESUMING", "teamInfo Updated: " + teamNums[i] + " " + teamNames[i] + " " + teamAutos[i] + " " + teamTeles[i]);
+
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                initStuff();
+                                srl.setRefreshing(false);
+
+                            }
+                        });
+
+                    }
+                }).start();
+
+            }
+        });
+
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -154,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-                return true;
+                return false;
             }
         });
 
@@ -299,80 +362,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void initStuff() {
 
-        tbl = findViewById(R.id.mainTable);
-        tbl.removeAllViewsInLayout();
-        TableRow tblrow0 = new TableRow(this);
+        mListView = findViewById(R.id.listView);
+        mListView.removeAllViewsInLayout();
+        TeamAdapter teamAdapter = new TeamAdapter(this, R.layout.content_row, teams);
+        mListView.setAdapter(teamAdapter);
 
-        TextView txt0 = new TextView(this);
-        txt0.setText("  Team Number  ");
-        txt0.setTextColor(android.graphics.Color.rgb(33,81,8));
-        tblrow0.addView(txt0);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        TextView txt1 = new TextView(this);
-        txt1.setText("  Team Name  ");
-        txt1.setTextColor(android.graphics.Color.rgb(33,81,8));
-        tblrow0.addView(txt1);
+                startTeamDetails(position);
 
-        TextView txt2 = new TextView(this);
-        txt2.setText("  Total Points  ");
-        txt2.setTextColor(android.graphics.Color.rgb(33,81,8));
-        tblrow0.addView(txt2);
+            }
+        });
 
-        TextView txt3 = new TextView(this);
-        txt3.setText("  Details  ");
-        txt3.setTextColor(android.graphics.Color.rgb(33,81,8));
-        tblrow0.addView(txt3);
-
-        tbl.addView(tblrow0);
-
-        Log.d("INITIALIZATION/RESUMING", "COLUMN HEADERS ADDED.");
-
-        Log.d("INITIALIZATION/RESUMING", "STARTING FOR LOOP");
-        for(int i = 0; i < numberOfTeams; i++) {
-
-            final int tN = teamIds[i];
-
-            TableRow tblrow = new TableRow(this);
-
-            Log.d("INITIALIZATION/RESUMING", "TableRow: " + String.valueOf(i));
-
-            teamTotal = teamAutos[i] + teamTeles[i];
-
-            Log.d("INITIALIZATION/RESUMING", "teamTotal: " + String.valueOf(i) + ": " + String.valueOf(teamTotal));
-
-            TextView tv1 = new TextView(this);
-            tv1.setText(String.valueOf(teamNums[i]));
-            tv1.setTextColor(android.graphics.Color.rgb(33,81,8));
-            tv1.setGravity(Gravity.CENTER);
-            tblrow.addView(tv1);
-            Log.d("INITIALIZATION/RESUMING", "TEXT 1(" + String.valueOf(teamNums[i]) + ") added.");
-            TextView tv2 = new TextView(this);
-            tv2.setText(String.valueOf(shortenText(teamNames[i])));
-            tv2.setTextColor(android.graphics.Color.rgb(33,81,8));
-            tv2.setGravity(Gravity.CENTER);
-            tblrow.addView(tv2);
-            Log.d("INITIALIZATION/RESUMING", "TEXT 2(" + String.valueOf(teamNames[i]) + ") added.");
-            TextView tv3 = new TextView(this);
-            tv3.setText(String.valueOf(teamTotal));
-            tv3.setTextColor(android.graphics.Color.rgb(33,81,8));
-            tv3.setGravity(Gravity.CENTER);
-            tblrow.addView(tv3);
-            Log.d("INITIALIZATION/RESUMING", "TEXT 3(" + String.valueOf(teamTotal) + ") added.");
-            ImageButton button = new ImageButton(this);
-            button.setImageResource(R.mipmap.ic_info_black_18dp);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    startTeamDetails(view, tN);
-
-                }
-            });
-            tblrow.addView(button);
-            tbl.addView(tblrow);
-            Log.d("INITIALIZATION/RESUMING", "TableRow added to Tabel.");
-
-        }
 
     }
     public String shortenText(String s) {
@@ -393,10 +396,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
 
-        super.onResume();
+        mListView = findViewById(R.id.listView);
+        mListView.removeAllViewsInLayout();
 
-        tbl = findViewById(R.id.mainTable);
-        tbl.removeAllViewsInLayout();
+        super.onResume();
 
         new Thread(new Runnable() {
             @Override
@@ -447,38 +450,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 
-        for(int i = 0; i < numberOfTeams; i++) {
-
-            TableRow tblrow = new TableRow(this);
-
-            teamTotal = teamAutos[i] + teamTeles[i];
-
-            TextView tv1 = new TextView(this);
-            tv1.setText(String.valueOf(teamNums[i]));
-            tv1.setTextColor(android.graphics.Color.rgb(33,81,8));
-            tv1.setGravity(Gravity.CENTER);
-            tblrow.addView(tv1);
-
-            TextView tv2 = new TextView(this);
-            tv2.setText(String.valueOf(teamNames[i]));
-            tv2.setTextColor(android.graphics.Color.rgb(33,81,8));
-            tv2.setGravity(Gravity.CENTER);
-            tblrow.addView(tv2);
-
-            TextView tv3 = new TextView(this);
-            tv3.setText(String.valueOf(teamTotal));
-            tv3.setTextColor(android.graphics.Color.rgb(33,81,8));
-            tv3.setGravity(Gravity.CENTER);
-            tblrow.addView(tv3);
-
-            tblrow.setMinimumHeight(20);
-            tbl.addView(tblrow);
-
-        }
-
     }
 
-    public void startTeamDetails(View view, int teamNum) {
+    public void startTeamDetails(int teamNum) {
 
         Intent intent = new Intent(this, TeamDetailsActivity.class);
         intent.putExtra("TEAM_NUMBER", teamNum);
