@@ -11,6 +11,7 @@ import android.media.Image;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -80,6 +81,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mDb = Room.databaseBuilder(getApplicationContext(),
+                        TeamDatabase.class, "team-database").build();
+                mDao = mDb.getTeamDao();
+
+            }
+        }).start();
+
         Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                 .getBoolean("isFirstRun", true);
 
@@ -91,16 +102,6 @@ public class MainActivity extends AppCompatActivity {
 
         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
                 .putBoolean("isFirstRun", false).apply();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mDb = Room.databaseBuilder(getApplicationContext(),
-                        TeamDatabase.class, "team-database").build();
-                mDao = mDb.getTeamDao();
-
-            }
-        }).start();
 
         Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
@@ -347,6 +348,13 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
 
+            case R.id.action_clearPrefs:
+
+                getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().clear().apply();
+                recreate();
+
+                break;
+
         }
 
         return true;
@@ -371,7 +379,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                startTeamDetails(position);
+                TextView tv = view.findViewById(R.id.subTitleText);
+                startTeamDetails(Integer.valueOf(tv.getText().toString()));
 
             }
         });
@@ -436,7 +445,7 @@ public class MainActivity extends AppCompatActivity {
                     teamAutos[i] = tempTeam.getAutoPoints();
                     teamTeles[i] = tempTeam.getTelePoints();
 
-                    Log.d("RESUMING", "teamInfo Updated: " + teamNums[i] + " " + teamNames[i] + " " + teamAutos[i] + " " + teamTeles[i]);
+                    Log.d("RESUMING", "teamInfo Updated: " + teamIds[i] + " " + teamNums[i] + " " + teamNames[i] + " " + teamAutos[i] + " " + teamTeles[i]);
 
                 }
 

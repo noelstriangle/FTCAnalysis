@@ -27,6 +27,9 @@ public interface TeamDao {
     @Query("SELECT * FROM team WHERE id = :id")
     Team getTeam(int id);
 
+    @Query("SELECT * FROM team WHERE team_number = :tN")
+    Team getTeamByTeamNumber(int tN);
+
     @Query("SELECT image FROM team WHERE id = :id")
     byte[] getImage(int id);
 

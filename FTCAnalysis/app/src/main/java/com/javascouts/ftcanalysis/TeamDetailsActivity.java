@@ -193,7 +193,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
                 mDao = mDb.getTeamDao();
                 Log.d("DETAILCREATION","Database instantiated.");
 
-                tempTeam = mDao.getTeam(teamNum);
+                tempTeam = mDao.getTeamByTeamNumber(teamNum);
                 Log.d("DETAILCREATIION", "Team:" + String.valueOf(teamNum) + " received.");
 
                 try {

@@ -1,6 +1,7 @@
 package com.javascouts.ftcanalysis;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,15 @@ public class TeamAdapter extends ArrayAdapter<Team> {
             TextView tt1 = v.findViewById(R.id.titleText);
             TextView tt2 = v.findViewById(R.id.subTitleText);
             TextView tt3 = v.findViewById(R.id.pointsText);
+
+            if(p.getIsUser()) {
+
+                v.setBackgroundColor(Color.rgb(37, 130, 41));
+                tt1.setTextColor(Color.rgb(255, 202, 43));
+                tt2.setTextColor(Color.rgb(255,202,43));
+                tt3.setTextColor(Color.rgb(255,202,43));
+
+            }
 
             if (tt1 != null) {
                 tt1.setText(p.getTeamName());

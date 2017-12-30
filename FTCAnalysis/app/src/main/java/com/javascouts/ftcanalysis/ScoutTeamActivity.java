@@ -285,6 +285,7 @@ public class ScoutTeamActivity extends AppCompatActivity {
                 tempTeam.setUprightb(uprightb);
                 tempTeam.setBalanceb(balanceb);
                 tempTeam.setOtherNotes(teamInfos);
+                tempTeam.setIsUser(false);
                 try {
                     tempTeam.setImage(getBytes(image));
                 } catch(NullPointerException e) {

@@ -42,7 +42,8 @@ public class MatchAnalyseActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbarMA);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Match Analysis");
+
+        getSupportActionBar().setTitle("Match Analysis");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -81,7 +82,7 @@ public class MatchAnalyseActivity extends AppCompatActivity {
 
                     case R.id.matchAnalysis:
 
-                        new Toast(MatchAnalyseActivity.this).makeText(MatchAnalyseActivity.this, "Already in Scouting", Toast.LENGTH_LONG);
+                        new Toast(MatchAnalyseActivity.this).makeText(MatchAnalyseActivity.this, "Already in Analysis", Toast.LENGTH_LONG);
 
                         break;
 

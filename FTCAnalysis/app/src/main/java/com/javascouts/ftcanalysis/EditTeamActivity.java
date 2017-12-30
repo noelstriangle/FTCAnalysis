@@ -286,6 +286,7 @@ public class EditTeamActivity extends AppCompatActivity {
                 tempTeam.setUprightb(uprightb);
                 tempTeam.setBalanceb(balanceb);
                 tempTeam.setOtherNotes(description.getText().toString());
+                tempTeam.setIsUser(db.TeamDao().getTeamByTeamNumber(teamN).getIsUser());
                 try {
                     tempTeam.setImage(getBytes(image));
                 } catch(NullPointerException e) {
@@ -327,7 +328,7 @@ public class EditTeamActivity extends AppCompatActivity {
 
     private static void addTeam(final TeamDatabase db, Team team, int todelete) {
 
-        db.TeamDao().deleteAll(db.TeamDao().getTeam(todelete));
+        db.TeamDao().deleteAll(db.TeamDao().getTeamByTeamNumber(todelete));
         db.TeamDao().insertAll(team);
     }
 
@@ -344,7 +345,7 @@ public class EditTeamActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                team = db.TeamDao().getTeam(id);
+                team = db.TeamDao().getTeamByTeamNumber(id);
 
                 runOnUiThread(new Runnable() {
                     @Override

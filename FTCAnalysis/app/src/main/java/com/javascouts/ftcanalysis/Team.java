@@ -67,6 +67,9 @@ public class Team {
     @ColumnInfo(name="image")
     private byte[] image;
 
+    @ColumnInfo(name="isUser")
+    private boolean isUser;
+
     public int getId() {                            return this.id;}
     public void setId(int value) {                  this.id = value;}
 
@@ -124,5 +127,7 @@ public class Team {
     public byte[] getImage() {                        return this.image;}
     public void setImage(byte[] value) {                            this.image = value;}
 
+    public boolean getIsUser() {                       return isUser;}
+    public void setIsUser(boolean value) {             isUser = value;}
 
 }

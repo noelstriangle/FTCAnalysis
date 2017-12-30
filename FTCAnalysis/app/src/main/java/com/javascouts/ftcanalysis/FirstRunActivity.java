@@ -1,5 +1,6 @@
 package com.javascouts.ftcanalysis;
 
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -53,6 +54,9 @@ public class FirstRunActivity extends AppCompatActivity {
 
         actionBar.setTitle("Setup");
         toolbar.setTitleTextColor(android.graphics.Color.rgb(33,81,8));
+
+        db = Room.databaseBuilder(getApplicationContext(),
+                TeamDatabase.class, "team-database").build();
 
         jewel = findViewById(R.id.jewel);
         glyphAuto = findViewById(R.id.glyphAuto);
@@ -292,6 +296,7 @@ public class FirstRunActivity extends AppCompatActivity {
                 tempTeam.setUprightb(uprightb);
                 tempTeam.setBalanceb(balanceb);
                 tempTeam.setOtherNotes(teamInfos);
+                tempTeam.setIsUser(true);
                 try {
                     tempTeam.setImage(getBytes(image));
                 } catch(NullPointerException e) {
