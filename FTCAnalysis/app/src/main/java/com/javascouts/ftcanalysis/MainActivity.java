@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.scoutTeam:
 
-                        new Toast(MainActivity.this).makeText(MainActivity.this, "Already in Scouting", Toast.LENGTH_LONG).show();
+                        new Toast(MainActivity.this).makeText(MainActivity.this, "Already in Scouting", Toast.LENGTH_SHORT).show();
                         mDrawerLayout.closeDrawers();
 
                         break;

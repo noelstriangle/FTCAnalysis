@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/square_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,7 +40,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.javascouts.ftcanalysis.MainActivity" />
         </activity>
-        <activity android:name=".MatchAnalyseActivity"></activity>
+        <activity android:name=".MatchAnalyseActivity"
+            android:launchMode="singleInstance"/>
         <activity
             android:name=".FirstRunActivity"
             android:label="@string/title_activity_first_run"

@@ -85,13 +85,15 @@ public class MatchAnalyseActivity extends AppCompatActivity {
 
                     case R.id.scoutTeam:
 
-                        new Intent(MatchAnalyseActivity.this, MainActivity.class);
+                        startActivity(new Intent(MatchAnalyseActivity.this, MainActivity.class));
+                        mDrawerLayout.closeDrawers();
 
                         break;
 
                     case R.id.matchAnalysis:
 
-                        new Toast(MatchAnalyseActivity.this).makeText(MatchAnalyseActivity.this, "Already in Analysis", Toast.LENGTH_LONG).show();
+                        new Toast(MatchAnalyseActivity.this).makeText(MatchAnalyseActivity.this, "Already in Analysis", Toast.LENGTH_SHORT).show();
+                        mDrawerLayout.closeDrawers();
 
                         break;
 
