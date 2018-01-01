@@ -239,6 +239,12 @@ public class FirstRunActivity extends AppCompatActivity {
 
     public void getInfoAndKill(android.view.View view) {
 
+        if(onFTC.isChecked()) {
+
+            finish();
+
+        }
+
         new Thread(new Runnable() {
             @Override
             public void run() {

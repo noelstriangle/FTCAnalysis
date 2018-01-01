@@ -18,23 +18,29 @@ import java.util.List;
 @Dao
 public interface TeamDao {
 
-    @Query("SELECT * FROM team")
+    @Query("SELECT * FROM teams")
     List<Team> getAll();
 
-    @Query("SELECT * FROM team ORDER BY team_number")
+    @Query("SELECT * FROM teams ORDER BY team_number")
     List<Team> getAllAndSort();
 
-    @Query("SELECT * FROM team WHERE id = :id")
+    @Query("SELECT * FROM matches ORDER BY match_number")
+    List<Match> getMatchesAndSort();
+
+    @Query("SELECT * FROM teams WHERE id = :id")
     Team getTeam(int id);
 
-    @Query("SELECT * FROM team WHERE team_number = :tN")
+    @Query("SELECT * FROM teams WHERE team_number = :tN")
     Team getTeamByTeamNumber(int tN);
 
-    @Query("SELECT image FROM team WHERE id = :id")
+    @Query("SELECT image FROM teams WHERE id = :id")
     byte[] getImage(int id);
 
     @Insert
     void insertAll(Team... teams);
+
+    @Insert
+    void insertMatch(Match... matches);
 
     @Update
     void updateAll(Team... teams);

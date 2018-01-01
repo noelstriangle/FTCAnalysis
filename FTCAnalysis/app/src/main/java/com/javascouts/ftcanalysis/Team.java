@@ -7,7 +7,7 @@ import android.arch.persistence.room.*;
 
 import java.sql.Blob;
 
-@Entity(tableName = "team")
+@Entity(tableName = "teams")
 public class Team {
 
     @PrimaryKey(autoGenerate = true)

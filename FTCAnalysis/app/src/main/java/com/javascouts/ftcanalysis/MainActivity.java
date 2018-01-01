@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.drm.DrmStore;
 import android.media.Image;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -205,14 +206,15 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.scoutTeam:
 
                         new Toast(MainActivity.this).makeText(MainActivity.this, "Already in Scouting", Toast.LENGTH_LONG).show();
+                        mDrawerLayout.closeDrawers();
 
                         break;
 
                     case R.id.matchAnalysis:
 
                         Intent fadjk = new Intent(MainActivity.this, MatchAnalyseActivity.class);
+                        mDrawerLayout.closeDrawers();
                         startActivity(fadjk);
-
 
                     break;
 
@@ -266,6 +268,8 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId()){
 
             case R.id.action_settings:
+
+                startSettings();
 
                 break;
 
@@ -364,6 +368,13 @@ public class MainActivity extends AppCompatActivity {
     public void scoutNewTeam(View view) {
 
         Intent intent = new Intent(this, ScoutTeamActivity.class);
+        startActivity(intent);
+
+    }
+
+    public void startSettings() {
+
+        Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
 
     }

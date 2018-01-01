@@ -5,9 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.arch.persistence.room.Room;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -25,21 +23,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.app.ActionBar;
 
-import org.apache.commons.lang3.ObjectUtils;
-
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * Created by Liam on 12/9/2017.
@@ -97,7 +89,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
 
         init(teamN);
 
-        Toolbar myToolbar = findViewById(R.id.toolbarTD);
+        Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
         myToolbar.setTitleTextColor(android.graphics.Color.rgb(33,81,8));
 
@@ -233,7 +225,7 @@ public class TeamDetailsActivity extends AppCompatActivity {
             }
         }).start();
 
-        Toolbar myToolbar = findViewById(R.id.toolbarTD);
+        Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
         myToolbar.setTitleTextColor(android.graphics.Color.rgb(33,81,8));
 
