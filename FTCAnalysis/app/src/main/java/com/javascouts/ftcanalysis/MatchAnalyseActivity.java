@@ -251,6 +251,7 @@ public class MatchAnalyseActivity extends AppCompatActivity {
                                 listView.removeAllViewsInLayout();
                                 MatchAdapter matchAdapter = new MatchAdapter(MatchAnalyseActivity.this, R.layout.content_match_row, matches);
                                 listView.setAdapter(matchAdapter);
+                                listView.setEmptyView(findViewById(R.id.blank2));
                                 srl.setRefreshing(false);
 
                             }
