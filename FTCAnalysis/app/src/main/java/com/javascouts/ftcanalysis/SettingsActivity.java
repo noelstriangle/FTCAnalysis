@@ -125,6 +125,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+        PreferenceFragment pf = new AllPreferenceFragment();
+        startPreferenceFragment(pf, true);
     }
 
     /**

@@ -29,6 +29,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     public Intent intent;
 
     private ListView tbl;
-
+    private static Toast t;
     public List<Team> teams;
     public Team tempTeam;
     public List<Team> resumeTeams;
@@ -107,15 +108,15 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
 
-        Intent intent = getIntent();
-
         navigation = findViewById(R.id.navigation);
 
         ActionBar actionBar = getSupportActionBar();
 
+        t = Toast.makeText(this, "Already In Scouting", Toast.LENGTH_SHORT);
+
         actionBar.setTitle("Scouting");
 
-        myToolbar.setTitleTextColor(android.graphics.Color.rgb(33,81,8));
+        myToolbar.setTitleTextColor(getResources().getColor(R.color.textColor));
 
         mTitle = mDrawerTitle = getTitle();
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
                             teamIds[i] = tempTeam.getId();
                             teamNums[i] = tempTeam.getTeamNumber();
-                            teamNames[i] = tempTeam.getTeamName();
+                            teamNames[i] = shortenText(tempTeam.getTeamName());
                             teamAutos[i] = tempTeam.getAutoPoints();
                             teamTeles[i] = tempTeam.getTelePoints();
 
@@ -205,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.scoutTeam:
 
-                        new Toast(MainActivity.this).makeText(MainActivity.this, "Already in Scouting", Toast.LENGTH_SHORT).show();
+                        t.show();
                         mDrawerLayout.closeDrawers();
 
                         break;
@@ -311,9 +312,9 @@ public class MainActivity extends AppCompatActivity {
 
                 AlertDialog.Builder deleteBuilder = new AlertDialog.Builder(this);
 
-                deleteBuilder.setTitle("Delete Database");
+                deleteBuilder.setTitle("Delete Teams");
 
-                deleteBuilder.setMessage("Deleteing all the teams will delete all the teams. Maybe export before you do this? Understand?");
+                deleteBuilder.setMessage("Deleting all the teams will delete all the teams. Maybe export before you do this? Understand?");
 
                 deleteBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -385,6 +386,7 @@ public class MainActivity extends AppCompatActivity {
         mListView.removeAllViewsInLayout();
         TeamAdapter teamAdapter = new TeamAdapter(this, R.layout.content_row, teams);
         mListView.setAdapter(teamAdapter);
+        mListView.setEmptyView(findViewById(R.id.empty));
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -400,9 +402,9 @@ public class MainActivity extends AppCompatActivity {
     }
     public String shortenText(String s) {
 
-        if (s.length() > 12) {
+        if (s.length() > 15) {
 
-            s = StringUtils.abbreviate(s, 15);
+            s = StringUtils.abbreviate(s, 18);
             return s;
 
         } else {
@@ -452,7 +454,7 @@ public class MainActivity extends AppCompatActivity {
 
                     teamIds[i] = tempTeam.getId();
                     teamNums[i] = tempTeam.getTeamNumber();
-                    teamNames[i] = tempTeam.getTeamName();
+                    teamNames[i] = shortenText(tempTeam.getTeamName());
                     teamAutos[i] = tempTeam.getAutoPoints();
                     teamTeles[i] = tempTeam.getTelePoints();
 

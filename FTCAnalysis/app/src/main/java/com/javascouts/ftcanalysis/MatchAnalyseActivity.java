@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class MatchAnalyseActivity extends AppCompatActivity {
     private TeamDatabase mDb;
     private TeamDao mDao;
     private List<Match> matches;
+    private static Toast t;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +54,16 @@ public class MatchAnalyseActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbarMA);
         setSupportActionBar(toolbar);
 
+        toolbar.setTitleTextColor(getResources().getColor(R.color.textColor));
+
         getSupportActionBar().setTitle("Match Analysis");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
         navigation = findViewById(R.id.navigation);
+
+        t = Toast.makeText(this, "Already In Analysis", Toast.LENGTH_SHORT);
 
         mTitle = mDrawerTitle = getTitle();
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -92,7 +98,7 @@ public class MatchAnalyseActivity extends AppCompatActivity {
 
                     case R.id.matchAnalysis:
 
-                        new Toast(MatchAnalyseActivity.this).makeText(MatchAnalyseActivity.this, "Already in Analysis", Toast.LENGTH_SHORT).show();
+                        t.show();
                         mDrawerLayout.closeDrawers();
 
                         break;
@@ -135,8 +141,6 @@ public class MatchAnalyseActivity extends AppCompatActivity {
         toHide.setVisible(false);
         MenuItem toHidef = menu.findItem(R.id.action_edit);
         toHidef.setVisible(false);
-        MenuItem toHideg = menu.findItem(R.id.action_deleteall);
-        toHideg.setVisible(false);
         MenuItem toHidei = menu.findItem(R.id.action_export);
         toHidei.setVisible(false);
         toHide = menu.findItem(R.id.action_clearPrefs);
@@ -157,6 +161,51 @@ public class MatchAnalyseActivity extends AppCompatActivity {
         switch(item.getItemId()){
 
             case R.id.action_settings:
+
+                break;
+
+            case R.id.action_deleteall:
+
+                AlertDialog.Builder deleteBuilder = new AlertDialog.Builder(this);
+
+                deleteBuilder.setTitle("Delete Matches");
+
+                deleteBuilder.setMessage("Deleting all the teams will delete all the teams.");
+
+                deleteBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                for(int i = matches.size()-1; i >= 0; i--) {
+
+                                    mDao.deleteMatch(mDao.getMatchByMatchNumber(matches.get(i).getMatchNumber()));
+
+                                }
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        recreate();
+                                    }
+                                });
+
+                            }
+                        }).start();
+
+                    }
+                });
+                deleteBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+
+                AlertDialog deleteDialog = deleteBuilder.create();
+
+                deleteDialog.show();
 
                 break;
 
@@ -236,11 +285,30 @@ public class MatchAnalyseActivity extends AppCompatActivity {
                         MatchAdapter matchAdapter = new MatchAdapter(MatchAnalyseActivity.this, R.layout.content_match_row, matches);
                         listView.setAdapter(matchAdapter);
 
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                                TextView tv = view.findViewById(R.id.mN);
+                                startMatchDetails(Integer.valueOf(tv.getText().toString()));
+
+                            }
+                        });
+
                     }
                 });
 
             }
         }).start();
+
+    }
+
+    public void startMatchDetails(int matchNum) {
+
+        Intent intent = new Intent(this, MatchDetailsActivity.class);
+        intent.putExtra("MATCH_NUMBER", matchNum);
+        //Log.d("TESTING", "Extra:" + String.valueOf(matchNum) + " set.");
+        startActivity(intent);
 
     }
 

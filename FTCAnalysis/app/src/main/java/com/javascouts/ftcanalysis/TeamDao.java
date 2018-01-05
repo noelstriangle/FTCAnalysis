@@ -33,8 +33,8 @@ public interface TeamDao {
     @Query("SELECT * FROM teams WHERE team_number = :tN")
     Team getTeamByTeamNumber(int tN);
 
-    @Query("SELECT image FROM teams WHERE id = :id")
-    byte[] getImage(int id);
+    @Query("SELECT * FROM matches WHERE match_number = :mN")
+    Match getMatchByMatchNumber(int mN);
 
     @Insert
     void insertAll(Team... teams);
@@ -47,5 +47,8 @@ public interface TeamDao {
 
     @Delete
     void deleteAll(Team... teams);
+
+    @Delete
+    void deleteMatch(Match... matches);
 
 }

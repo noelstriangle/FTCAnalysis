@@ -59,7 +59,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.javascouts.ftcanalysis.MatchAnalyseActivity" />
         </activity>
-        <activity android:name=".MatchDetailsActivity"></activity>
+        <activity android:name=".MatchDetailsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MatchAnalyseActivity"/>
+        </activity>
     </application>
 
 </manifest>

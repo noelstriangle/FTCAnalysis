@@ -40,7 +40,7 @@ public class NewMatchActivity extends AppCompatActivity {
 
         Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
-        myToolbar.setTitleTextColor(android.graphics.Color.rgb(33,81,8));
+        myToolbar.setTitleTextColor(getResources().getColor(R.color.textColor2));
 
         ActionBar actionBar = getSupportActionBar();
 
