@@ -86,6 +86,10 @@ public class MatchDetailsActivity extends AppCompatActivity {
         toHide1.setVisible(false);
         MenuItem toHide2 = menu.findItem(R.id.action_deleteall);
         toHide2.setVisible(false);
+        toHide1 = menu.findItem(R.id.action_settings);
+        toHide1.setVisible(false);
+        toHide1 = menu.findItem(R.id.action_clearPrefs);
+        toHide1.setVisible(false);
         return true;
     }
 

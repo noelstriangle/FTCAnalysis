@@ -10,12 +10,14 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/app_bar_height">
+        android:layout_marginTop="@dimen/app_bar_height"
+        app:layout_anchor="@+id/app_bar"
+        app:layout_anchorGravity="left|bottom">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <CheckBox
                 android:id="@+id/onFTC"
@@ -23,6 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:drawableTop="8"
                 android:text="Are you on an FTC team?"
                 android:textAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Small" />
 

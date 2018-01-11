@@ -219,6 +219,18 @@ public class MainActivity extends AppCompatActivity {
 
                     break;
 
+                    case R.id.action_about:
+
+                        Intent yah = new Intent(MainActivity.this, AboutActivity.class);
+                        mDrawerLayout.closeDrawers();
+                        startActivity(yah);
+
+                        break;
+
+                    case R.id.action_reset:
+
+
+
                 }
 
                 return false;
@@ -252,8 +264,10 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menus, menu);
         MenuItem toHide = menu.findItem(R.id.action_delete);
         toHide.setVisible(false);
-        MenuItem toHidef = menu.findItem(R.id.action_edit);
-        toHidef.setVisible(false);
+        toHide = menu.findItem(R.id.action_edit);
+        toHide.setVisible(false);
+        toHide = menu.findItem(R.id.action_settings);
+        toHide.setVisible(false);
         return true;
 
     }
@@ -353,13 +367,6 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
 
-            case R.id.action_clearPrefs:
-
-                getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().clear().apply();
-                recreate();
-
-                break;
-
         }
 
         return true;
@@ -386,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
         mListView.removeAllViewsInLayout();
         TeamAdapter teamAdapter = new TeamAdapter(this, R.layout.content_row, teams);
         mListView.setAdapter(teamAdapter);
-        mListView.setEmptyView(findViewById(R.id.empty));
+        //mListView.setEmptyView(findViewById(R.id.empty));
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
