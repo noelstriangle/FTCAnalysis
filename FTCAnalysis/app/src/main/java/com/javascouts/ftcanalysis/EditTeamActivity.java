@@ -58,7 +58,7 @@ public class EditTeamActivity extends AppCompatActivity {
 
         Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
-        myToolbar.setTitleTextColor(getResources().getColor(R.color.textColor2));
+        myToolbar.setTitleTextColor(getResources().getColor(R.color.textColor));
 
         teamN = getIntent().getIntExtra("TEAM_NUMBER", 0);
 

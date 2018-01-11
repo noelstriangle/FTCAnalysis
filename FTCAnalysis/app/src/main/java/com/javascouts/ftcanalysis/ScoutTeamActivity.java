@@ -61,7 +61,7 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
         Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
-        myToolbar.setTitleTextColor(getResources().getColor(R.color.textColor2));
+        myToolbar.setTitleTextColor(getResources().getColor(R.color.textColor));
 
         ActionBar actionBar = getSupportActionBar();
 

@@ -55,6 +55,7 @@ public class FirstRunActivity extends AppCompatActivity {
         actionBar.setTitle("Setup");
         toolbar.setTitleTextColor(getResources().getColor(R.color.textColor2));
 
+
         db = Room.databaseBuilder(getApplicationContext(),
                 TeamDatabase.class, "team-database").build();
 

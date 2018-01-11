@@ -40,11 +40,11 @@ public class NewMatchActivity extends AppCompatActivity {
 
         Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
-        myToolbar.setTitleTextColor(getResources().getColor(R.color.textColor2));
+        myToolbar.setTitleTextColor(getResources().getColor(R.color.textColor));
 
         ActionBar actionBar = getSupportActionBar();
 
-        actionBar.setTitle("Scout New Team");
+        actionBar.setTitle("Add New Match");
 
         actionBar.setDisplayHomeAsUpEnabled(true);
 
