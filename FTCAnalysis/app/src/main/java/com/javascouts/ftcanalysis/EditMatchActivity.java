@@ -1,26 +1,21 @@
 package com.javascouts.ftcanalysis;
 
 import android.arch.persistence.room.Room;
-import android.database.DataSetObserver;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewMatchActivity extends AppCompatActivity {
+public class EditMatchActivity extends AppCompatActivity {
 
     TeamDatabase mDb;
     TeamDao mDao;
@@ -40,9 +35,11 @@ public class NewMatchActivity extends AppCompatActivity {
 
         Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
-        myToolbar.setTitleTextColor(getResources().getColor(R.color.textColor));
+        myToolbar.setTitleTextColor(getResources().getColor(R.color.textColor2));
 
         ActionBar actionBar = getSupportActionBar();
+
+        actionBar.setTitle("Edit Match");
 
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -137,7 +134,7 @@ public class NewMatchActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast t = new Toast(NewMatchActivity.this).makeText(NewMatchActivity.this, "One or more fields are not filled out. Or something.", Toast.LENGTH_SHORT);
+                            Toast t = new Toast(EditMatchActivity.this).makeText(EditMatchActivity.this, "One or more fields are not filled out. Or something.", Toast.LENGTH_SHORT);
                             t.show();
                             }
                     });
@@ -146,6 +143,7 @@ public class NewMatchActivity extends AppCompatActivity {
 
                 }
 
+                mDao.deleteMatch(mDao.getMatchByMatchNumber(mN));
                 mDao.insertMatch(tempMatch);
 
                 runOnUiThread(new Runnable() {

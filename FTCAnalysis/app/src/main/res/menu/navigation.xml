@@ -3,13 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <item
-        android:id="@+id/scoutTeam"
-        android:checkable="false"
-        android:title="@string/scout_team" />
-
-    <item
-        android:id="@+id/matchAnalysis"
-        android:title="@string/match_analysis" />
+    <group>
+        <item android:title="@string/about"
+            android:id="@+id/action_about"/>
+        <item android:title="Reset"
+            android:id="@+id/action_reset"/>
+    </group>
+    <group >
+        <item
+            android:id="@+id/scoutTeam"
+            android:checkable="false"
+            android:title="@string/scout_team" />
+        <item
+            android:id="@+id/matchAnalysis"
+            android:title="@string/match_analysis" />
+    </group>
 
 </menu>

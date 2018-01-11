@@ -18,6 +18,4 @@
     <item android:id="@+id/action_edit"
         android:title="@string/edit_team_info"/>
 
-    <item android:id="@+id/action_clearPrefs"
-        android:title="Clear Preferences"/>
 </menu>
