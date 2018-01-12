@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.drm.DrmStore;
@@ -229,7 +230,43 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.action_reset:
 
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
+                        builder.setTitle("Reset Everything");
+
+                        builder.setMessage("If you reset everything, your teams will be reset, your matches will be reset, and your preferences will be reset. Are you sure you want to proceed?");
+
+                        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                SharedPreferences sp = getSharedPreferences("PREFERENCE", MODE_PRIVATE);
+                                sp.edit().clear().apply();
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        for(int i = numberOfTeams-1; i >= 0; i--) {
+
+                                            mDao.deleteAll(mDao.getTeam(teamIds[i]));
+
+                                        }
+
+                                    }
+                                }).start();
+
+                            }
+                        });
+                        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
+                        });
+
+                        AlertDialog dialog = builder.create();
+
+                        dialog.show();
+
+                        break;
 
                 }
 
