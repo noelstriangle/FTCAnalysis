@@ -4,9 +4,11 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.javascouts.ftcanalysis.Team;
 
+import java.sql.Blob;
 import java.util.List;
 
 /**
@@ -16,28 +18,37 @@ import java.util.List;
 @Dao
 public interface TeamDao {
 
-    @Query("SELECT * FROM team")
+    @Query("SELECT * FROM teams")
     List<Team> getAll();
 
-    @Query("SELECT teamNumber from team ORDER BY teamNumber")
-    int[] getTeamNumbers();
+    @Query("SELECT * FROM teams ORDER BY team_number")
+    List<Team> getAllAndSort();
 
-    @Query("SELECT team_name from team ORDER BY teamNumber")
-    String[] getTeamNames();
+    @Query("SELECT * FROM matches ORDER BY match_number")
+    List<Match> getMatchesAndSort();
 
-    @Query("SELECT auto_points from team ORDER BY teamNumber")
-    int[] getAutoPoints();
+    @Query("SELECT * FROM teams WHERE id = :id")
+    Team getTeam(int id);
 
-    @Query("SELECT tele_points from team ORDER BY teamNumber")
-    int[] getTelePoints();
+    @Query("SELECT * FROM teams WHERE team_number = :tN")
+    Team getTeamByTeamNumber(int tN);
 
-    @Query("SELECT * FROM team WHERE teamNumber = :teamNumber")
-    Team getTeam(int teamNumber);
+    @Query("SELECT * FROM matches WHERE match_number = :mN")
+    Match getMatchByMatchNumber(int mN);
 
     @Insert
     void insertAll(Team... teams);
 
+    @Insert
+    void insertMatch(Match... matches);
+
+    @Update
+    void updateAll(Team... teams);
+
     @Delete
     void deleteAll(Team... teams);
+
+    @Delete
+    void deleteMatch(Match... matches);
 
 }

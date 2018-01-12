@@ -12,4 +12,10 @@
     <item android:id="@+id/action_export"
         android:title="@string/export"/>
 
+    <item android:id="@+id/action_deleteall"
+        android:title="@string/delete_all"/>
+
+    <item android:id="@+id/action_edit"
+        android:title="@string/edit_team_info"/>
+
 </menu>

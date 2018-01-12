@@ -1,45 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
+    android:layout_width="match_parent" android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/lib/com.javascouts.ftcanalysis"
     xmlns:app2="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbarST"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@color/colorPrimary"
-            android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            tools:layout_constraintLeft_creator="1"
-            tools:layout_constraintRight_creator="1"
-            tools:layout_constraintTop_creator="1" />
 
         <EditText
             android:id="@+id/teamName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:contentDescription="getTeamNAme"
             android:ems="10"
             android:hint="Team Name"
             android:inputType="textCapWords"
             android:textAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Small"
             app2:layout_constraintStart_toStartOf="parent"
-            app2:layout_constraintTop_toBottomOf="@+id/toolbarST"
+            app2:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbarST"
             tools:ignore="HardcodedText"
@@ -400,26 +383,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/relicZoneBar" />
 
-        <Button
-            android:id="@+id/finish"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="170dp"
-            android:onClick="getInfoAndKill"
-            android:text="Finish Team"
-            app2:layout_constraintEnd_toEndOf="parent"
-            app2:layout_constraintHorizontal_bias="0.502"
-            app2:layout_constraintStart_toStartOf="parent"
-            app2:layout_constraintTop_toBottomOf="@+id/upright"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/columnBar"
-            tools:layout_constraintLeft_creator="1"
-            tools:layout_constraintRight_creator="1" />
-
         <CheckBox
             android:id="@+id/autoCypher"
             android:layout_width="wrap_content"
@@ -464,7 +427,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:onClick="selectPic"
-            android:text="Take A Picture"
+            android:text="Choose A Picture"
             app2:layout_constraintEnd_toEndOf="parent"
             app2:layout_constraintStart_toStartOf="parent"
             app2:layout_constraintTop_toBottomOf="@+id/description" />

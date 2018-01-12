@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <group android:id="@+id/g2">
+        <item
+            android:id="@+id/scoutTeam"
+            android:checkable="false"
+            android:title="@string/scout_team" />
+        <item
+            android:id="@+id/matchAnalysis"
+            android:title="@string/match_analysis" />
+    </group>
+
+    <group android:id="@+id/g1">
+        <item android:title="@string/about"
+            android:id="@+id/action_about"/>
+        <item android:title="Reset"
+            android:id="@+id/action_reset"/>
+    </group>
+
+
+</menu>

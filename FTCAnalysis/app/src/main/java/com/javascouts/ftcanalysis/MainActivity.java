@@ -4,8 +4,20 @@ import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.Cursor;
+import android.drm.DrmStore;
+import android.media.Image;
 import android.os.Environment;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,16 +26,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.opencsv.CSVWriter;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,17 +59,25 @@ public class MainActivity extends AppCompatActivity {
     public int[] teamNums;
     public String[] teamNames;
     public int[] teamAutos;
-    public int[] teamTeles;
+    public int[] teamTeles, teamIds;
     public int teamTotal;
+    private ListView mListView;
+    public Intent intent;
 
-    private TableLayout tbl;
-
+    private ListView tbl;
+    private static Toast t;
     public List<Team> teams;
     public Team tempTeam;
     public List<Team> resumeTeams;
+    public Team[] deleteTeams;
 
-    private boolean FIRST_RUN = true;
-
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private CharSequence mDrawerTitle;
+    private String[] mDrawerList;
+    private ListView mDrawerListView;
+    private CharSequence mTitle;
+    private NavigationView navigation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -63,11 +94,206 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 
+        Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                .getBoolean("isFirstRun", true);
+
+        if (isFirstRun) {
+
+            startActivity(new Intent(MainActivity.this, FirstRunActivity.class));
+
+        }
+
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
+                .putBoolean("isFirstRun", false).apply();
+
         Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
 
-        myToolbar.setTitleTextColor(android.graphics.Color.rgb(0,155,25));
+        navigation = findViewById(R.id.navigation);
 
+        ActionBar actionBar = getSupportActionBar();
+
+        t = Toast.makeText(this, "Already In Scouting", Toast.LENGTH_SHORT);
+
+        actionBar.setTitle("Scouting");
+
+        myToolbar.setTitleTextColor(getResources().getColor(R.color.textColor));
+
+        mTitle = mDrawerTitle = getTitle();
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.string.drawer_open, R.string.drawer_close) {
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        final SwipeRefreshLayout srl = findViewById(R.id.swiperefresh);
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDb = Room.databaseBuilder(getApplicationContext(),
+                                TeamDatabase.class, "team-database").build();
+                        mDao = mDb.getTeamDao();
+
+                        Log.d("RESUMING", "Database Instantiated.");
+
+                        resumeTeams = new ArrayList<>();
+                        teams = new ArrayList<>();
+
+                        teams = mDao.getAllAndSort();
+                        numberOfTeams = teams.size();
+
+                        Log.d("RESUMING", "numberOfTeams: " + String.valueOf(numberOfTeams));
+
+                        teamNums = new int[teams.size()];
+                        teamNames = new String[teams.size()];
+                        teamAutos = new int[teams.size()];
+                        teamTeles = new int[teams.size()];
+                        teamIds = new int[teams.size()];
+
+                        Log.d("RESUMING", "Arrays Created.");
+
+                        for(int i = 0; i < numberOfTeams; i++) {
+
+                            tempTeam = teams.get(i);
+
+                            teamIds[i] = tempTeam.getId();
+                            teamNums[i] = tempTeam.getTeamNumber();
+                            teamNames[i] = shortenText(tempTeam.getTeamName());
+                            teamAutos[i] = tempTeam.getAutoPoints();
+                            teamTeles[i] = tempTeam.getTelePoints();
+
+                            Log.d("RESUMING", "teamInfo Updated: " + teamNums[i] + " " + teamNames[i] + " " + teamAutos[i] + " " + teamTeles[i]);
+
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                initStuff();
+                                srl.setRefreshing(false);
+
+                            }
+                        });
+
+                    }
+                }).start();
+
+            }
+        });
+
+        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch(item.getItemId()) {
+
+                    case R.id.scoutTeam:
+
+                        t.show();
+                        mDrawerLayout.closeDrawers();
+
+                        break;
+
+                    case R.id.matchAnalysis:
+
+                        Intent fadjk = new Intent(MainActivity.this, MatchAnalyseActivity.class);
+                        mDrawerLayout.closeDrawers();
+                        startActivity(fadjk);
+
+                    break;
+
+                    case R.id.action_about:
+
+                        Intent yah = new Intent(MainActivity.this, AboutActivity.class);
+                        mDrawerLayout.closeDrawers();
+                        startActivity(yah);
+
+                        break;
+
+                    case R.id.action_reset:
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                        builder.setTitle("Reset Everything");
+
+                        builder.setMessage("If you reset everything, your teams will be reset, your matches will be reset, and your preferences will be reset. Are you sure you want to proceed?");
+
+                        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                SharedPreferences sp = getSharedPreferences("PREFERENCE", MODE_PRIVATE);
+                                sp.edit().clear().apply();
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        for(int i = numberOfTeams-1; i >= 0; i--) {
+
+                                            mDao.deleteAll(mDao.getTeam(teamIds[i]));
+
+                                        }
+
+                                    }
+                                }).start();
+
+                            }
+                        });
+                        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
+                        });
+
+                        AlertDialog dialog = builder.create();
+
+                        dialog.show();
+
+                        break;
+
+                }
+
+                return false;
+            }
+        });
+
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        return true;
+
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,15 +301,27 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menus, menu);
         MenuItem toHide = menu.findItem(R.id.action_delete);
         toHide.setVisible(false);
+        toHide = menu.findItem(R.id.action_edit);
+        toHide.setVisible(false);
+        toHide = menu.findItem(R.id.action_settings);
+        toHide.setVisible(false);
         return true;
 
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+
+            return true;
+
+        }
+
         switch(item.getItemId()){
 
             case R.id.action_settings:
+
+                startSettings();
 
                 break;
 
@@ -121,6 +359,51 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
 
+            case R.id.action_deleteall:
+
+                AlertDialog.Builder deleteBuilder = new AlertDialog.Builder(this);
+
+                deleteBuilder.setTitle("Delete Teams");
+
+                deleteBuilder.setMessage("Deleting all the teams will delete all the teams. Maybe export before you do this? Understand?");
+
+                deleteBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                for(int i = numberOfTeams-1; i >= 0; i--) {
+
+                                    mDao.deleteAll(mDao.getTeam(teamIds[i]));
+
+                                }
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        recreate();
+                                    }
+                                });
+
+                            }
+                        }).start();
+
+                    }
+                });
+                deleteBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+
+                AlertDialog deleteDialog = deleteBuilder.create();
+
+                deleteDialog.show();
+
+                break;
+
         }
 
         return true;
@@ -134,81 +417,43 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void startSettings() {
+
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+
+    }
+
     public void initStuff() {
 
-        tbl = findViewById(R.id.mainTable);
-        tbl.removeAllViewsInLayout();
-        TableRow tblrow0 = new TableRow(this);
+        mListView = findViewById(R.id.listView);
+        mListView.removeAllViewsInLayout();
+        TeamAdapter teamAdapter = new TeamAdapter(this, R.layout.content_row, teams);
+        mListView.setAdapter(teamAdapter);
+        //mListView.setEmptyView(findViewById(R.id.empty));
 
-        TextView txt0 = new TextView(this);
-        txt0.setText("  Team Number  ");
-        txt0.setTextColor(android.graphics.Color.rgb(0,155,25));
-        tblrow0.addView(txt0);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        TextView txt1 = new TextView(this);
-        txt1.setText("  Team Name  ");
-        txt1.setTextColor(android.graphics.Color.rgb(0,155,25));
-        tblrow0.addView(txt1);
+                TextView tv = view.findViewById(R.id.subTitleText);
+                startTeamDetails(Integer.valueOf(tv.getText().toString()));
 
-        TextView txt2 = new TextView(this);
-        txt2.setText("  Total Points  ");
-        txt2.setTextColor(android.graphics.Color.rgb(0,155,25));
-        tblrow0.addView(txt2);
+            }
+        });
 
-        TextView txt3 = new TextView(this);
-        txt3.setText("  Details  ");
-        txt3.setTextColor(android.graphics.Color.rgb(0,155,25));
-        tblrow0.addView(txt3);
 
-        tbl.addView(tblrow0);
+    }
+    public String shortenText(String s) {
 
-        Log.d("INITIALIZATION/RESUMING", "COLUMN HEADERS ADDED.");
+        if (s.length() > 15) {
 
-        Log.d("INITIALIZATION/RESUMING", "STARTING FOR LOOP");
-        for(int i = 0; i < numberOfTeams; i++) {
+            s = StringUtils.abbreviate(s, 18);
+            return s;
 
-            final int tN = teamNums[i];
+        } else {
 
-            TableRow tblrow = new TableRow(this);
-
-            Log.d("INITIALIZATION/RESUMING", "TableRow: " + String.valueOf(i));
-
-            teamTotal = teamAutos[i] + teamTeles[i];
-
-            Log.d("INITIALIZATION/RESUMING", "teamTotal: " + String.valueOf(i) + ": " + String.valueOf(teamTotal));
-
-            TextView tv1 = new TextView(this);
-            tv1.setText(String.valueOf(teamNums[i]));
-            tv1.setTextColor(android.graphics.Color.rgb(0,155,25));
-            tv1.setGravity(Gravity.CENTER);
-            tblrow.addView(tv1);
-            Log.d("INITIALIZATION/RESUMING", "TEXT 1(" + String.valueOf(teamNums[i]) + ") added.");
-            TextView tv2 = new TextView(this);
-            tv2.setText(String.valueOf(teamNames[i]));
-            tv2.setTextColor(android.graphics.Color.rgb(0,155,25));
-            tv2.setGravity(Gravity.CENTER);
-            tblrow.addView(tv2);
-            Log.d("INITIALIZATION/RESUMING", "TEXT 2(" + String.valueOf(teamNames[i]) + ") added.");
-            TextView tv3 = new TextView(this);
-            tv3.setText(String.valueOf(teamTotal));
-            tv3.setTextColor(android.graphics.Color.rgb(0,155,25));
-            tv3.setGravity(Gravity.CENTER);
-            tblrow.addView(tv3);
-            Log.d("INITIALIZATION/RESUMING", "TEXT 3(" + String.valueOf(teamTotal) + ") added.");
-            Button button = new Button(this);
-            button.setText("");
-            button.setWidth(10);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    startTeamDetails(view, tN);
-
-                }
-            });
-            tblrow.addView(button);
-            tbl.addView(tblrow);
-            Log.d("INITIALIZATION/RESUMING", "TableRow added to Tabel.");
+            return s;
 
         }
 
@@ -217,10 +462,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
 
-        super.onResume();
+        mListView = findViewById(R.id.listView);
+        mListView.removeAllViewsInLayout();
 
-        tbl = findViewById(R.id.mainTable);
-        tbl.removeAllViewsInLayout();
+        super.onResume();
 
         new Thread(new Runnable() {
             @Override
@@ -234,7 +479,7 @@ public class MainActivity extends AppCompatActivity {
                 resumeTeams = new ArrayList<>();
                 teams = new ArrayList<>();
 
-                teams = mDao.getAll();
+                teams = mDao.getAllAndSort();
                 numberOfTeams = teams.size();
 
                 Log.d("RESUMING", "numberOfTeams: " + String.valueOf(numberOfTeams));
@@ -243,6 +488,7 @@ public class MainActivity extends AppCompatActivity {
                 teamNames = new String[teams.size()];
                 teamAutos = new int[teams.size()];
                 teamTeles = new int[teams.size()];
+                teamIds = new int[teams.size()];
 
                 Log.d("RESUMING", "Arrays Created.");
 
@@ -250,12 +496,13 @@ public class MainActivity extends AppCompatActivity {
 
                     tempTeam = teams.get(i);
 
+                    teamIds[i] = tempTeam.getId();
                     teamNums[i] = tempTeam.getTeamNumber();
-                    teamNames[i] = tempTeam.getTeamName();
+                    teamNames[i] = shortenText(tempTeam.getTeamName());
                     teamAutos[i] = tempTeam.getAutoPoints();
                     teamTeles[i] = tempTeam.getTelePoints();
 
-                    Log.d("RESUMING", "teamInfo Updated: " + teamNums[i] + " " + teamNames[i] + " " + teamAutos[i] + " " + teamTeles[i]);
+                    Log.d("RESUMING", "teamInfo Updated: " + teamIds[i] + " " + teamNums[i] + " " + teamNames[i] + " " + teamAutos[i] + " " + teamTeles[i]);
 
                 }
 
@@ -269,38 +516,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 
-        for(int i = 0; i < numberOfTeams; i++) {
-
-            TableRow tblrow = new TableRow(this);
-
-            teamTotal = teamAutos[i] + teamTeles[i];
-
-            TextView tv1 = new TextView(this);
-            tv1.setText(String.valueOf(teamNums[i]));
-            tv1.setTextColor(android.graphics.Color.rgb(0,155,25));
-            tv1.setGravity(Gravity.CENTER);
-            tblrow.addView(tv1);
-
-            TextView tv2 = new TextView(this);
-            tv2.setText(String.valueOf(teamNames[i]));
-            tv2.setTextColor(android.graphics.Color.rgb(0,155,25));
-            tv2.setGravity(Gravity.CENTER);
-            tblrow.addView(tv2);
-
-            TextView tv3 = new TextView(this);
-            tv3.setText(String.valueOf(teamTotal));
-            tv3.setTextColor(android.graphics.Color.rgb(0,155,25));
-            tv3.setGravity(Gravity.CENTER);
-            tblrow.addView(tv3);
-
-            tblrow.setMinimumHeight(20);
-            tbl.addView(tblrow);
-
-        }
-
     }
 
-    public void startTeamDetails(View view, int teamNum) {
+    public void startTeamDetails(int teamNum) {
 
         Intent intent = new Intent(this, TeamDetailsActivity.class);
         intent.putExtra("TEAM_NUMBER", teamNum);
