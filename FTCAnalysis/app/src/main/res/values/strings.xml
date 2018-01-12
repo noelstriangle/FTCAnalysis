@@ -182,5 +182,7 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="about">About</string>
-    <string name="about_text">This app was designed by the Java Scouts! Hope to see you at worlds!</string>
+    <string name="about_text">This app was designed by the Java Scouts, team 9984! Hope to see you at worlds!</string>
+    <string name="contact_info">If you have any issues, contact javascouts@gmail.com</string>
+    <string name="issue_info">If you want to report a bug, go to github.com/noelstriangle/FTCAnalysis</string>
 </resources>

@@ -103,6 +103,18 @@ public class MatchAnalyseActivity extends AppCompatActivity {
 
                         break;
 
+                    case R.id.action_about:
+
+                        Intent yah = new Intent(MatchAnalyseActivity.this, AboutActivity.class);
+                        mDrawerLayout.closeDrawers();
+                        startActivity(yah);
+
+                        break;
+
+                    case R.id.action_reset:
+
+
+
                 }
 
                 return true;
@@ -143,8 +155,6 @@ public class MatchAnalyseActivity extends AppCompatActivity {
         toHidef.setVisible(false);
         MenuItem toHidei = menu.findItem(R.id.action_export);
         toHidei.setVisible(false);
-        toHide = menu.findItem(R.id.action_clearPrefs);
-        toHide.setVisible(false);
         toHide = menu.findItem(R.id.action_settings);
         toHide.setVisible(false);
         return true;

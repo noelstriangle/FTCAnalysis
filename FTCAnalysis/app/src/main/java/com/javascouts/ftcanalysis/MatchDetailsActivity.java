@@ -90,8 +90,6 @@ public class MatchDetailsActivity extends AppCompatActivity {
         toHide2.setVisible(false);
         toHide1 = menu.findItem(R.id.action_settings);
         toHide1.setVisible(false);
-        toHide1 = menu.findItem(R.id.action_clearPrefs);
-        toHide1.setVisible(false);
         return true;
     }
 
@@ -178,6 +176,12 @@ public class MatchDetailsActivity extends AppCompatActivity {
         autonomous.setTextColor(getResources().getColor(R.color.textColor2));
         autonomous.setTextSize(20);
         autonomous.setGravity(Gravity.CENTER_HORIZONTAL);
+        TextView autonomous2 = new TextView(this);
+
+        autonomous2.setText(makeAString(r1, r2, -3));
+        autonomous2.setTextColor(getResources().getColor(R.color.textColor2));
+        autonomous2.setTextSize(20);
+        autonomous2.setGravity(Gravity.CENTER_HORIZONTAL);
 
         TextView autoJewel = new TextView(this);
         autoJewel.setText(makeAString(r1, r2, 1));
@@ -217,9 +221,9 @@ public class MatchDetailsActivity extends AppCompatActivity {
         autoJewel2.setTextSize(16);
 
         TextView autoGlyph2 = new TextView(this);
-        autoJewel2.setText(makeAString(b1, b2, 2));
-        autoJewel2.setTextColor(getResources().getColor(R.color.textColor2));
-        autoJewel2.setTextSize(16);
+        autoGlyph2.setText(makeAString(b1, b2, 2));
+        autoGlyph2.setTextColor(getResources().getColor(R.color.textColor2));
+        autoGlyph2.setTextSize(16);
 
         TextView autoCypher2 = new TextView(this);
         autoCypher2.setText(makeAString(b1, b2, 3));
@@ -241,7 +245,7 @@ public class MatchDetailsActivity extends AppCompatActivity {
 
         blayout.addView(title2);
         blayout.addView(number2);
-        rlayout.addView(autonomous);
+        blayout.addView(autonomous2);
         blayout.addView(autoJewel2);
         blayout.addView(autoGlyph2);
         blayout.addView(autoCypher2);
