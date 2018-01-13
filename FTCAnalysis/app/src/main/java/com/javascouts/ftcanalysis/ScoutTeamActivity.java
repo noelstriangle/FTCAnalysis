@@ -294,7 +294,10 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
                 tempTeam.setAutoPoints((changeBoolToInt(jewelb) * 30) + (changeBoolToInt(glyphAutob) * 15) + (changeBoolToInt(autoCypherb) * 30) + (changeBoolToInt(safeZoneb) * 10));
                 tempTeam.setTelePoints((glyphBari * 2) + (rowBari * 10) + (columnBari * 20) +
-                        (changeBoolToInt(endGameCypherb) * 30) + (relicBari * (10 * (2 ^ relicZoneBari - 1)) + (changeBoolToInt(uprightb) * 15)) + (changeBoolToInt(balanceb) * 20));
+                        (changeBoolToInt(endGameCypherb) * 30) + (relicBari * changeZoneToPoints(relicZoneBari)) + (changeBoolToInt(balanceb) * 20) + (changeBoolToInt(uprightb) * 15));
+
+                db = Room.databaseBuilder(getApplicationContext(),
+                        TeamDatabase.class, "team-database").build();
 
                 addTeam(db, tempTeam);
 
@@ -375,6 +378,25 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
     }
 
+    public int changeZoneToPoints(int value) {
+
+        int temp = 0;
+        if(value == 0) {
+
+            temp = 0;
+        } else if(value == 1) {
+
+            temp = 10;
+        } else if(value == 2) {
+
+            temp = 20;
+        } else if(value == 3) {
+
+            temp = 40;
+        }
+        return temp;
+    }
+
     private static void addTeam(final TeamDatabase db, Team team) {
 
         db.TeamDao().insertAll(team);
@@ -385,8 +407,6 @@ public class ScoutTeamActivity extends AppCompatActivity {
     protected void onPause() {
 
         super.onPause();
-
-        db.close();
 
     }
 
