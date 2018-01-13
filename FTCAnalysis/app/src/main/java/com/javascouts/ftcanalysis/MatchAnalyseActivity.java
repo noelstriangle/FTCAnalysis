@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -44,6 +45,9 @@ public class MatchAnalyseActivity extends AppCompatActivity {
     private TeamDao mDao;
     private List<Match> matches;
     private static Toast t;
+    private int numberOfMatches, numberOfTeams;
+    private List<Team> teams;
+    private int[] matchIds, teamIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +117,56 @@ public class MatchAnalyseActivity extends AppCompatActivity {
 
                     case R.id.action_reset:
 
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MatchAnalyseActivity.this);
+
+                        builder.setTitle("Reset Everything");
+
+                        builder.setMessage("If you reset everything, your teams will be reset, your matches will be reset, and your preferences will be reset. Are you sure you want to proceed?");
+
+                        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        for(int i = numberOfTeams-1; i >= 0; i--) {
+
+                                            mDao.deleteAll(mDao.getTeam(teamIds[i]));
+
+                                        }
+                                        for(int i = numberOfMatches-1; i>= 0; i--) {
+
+                                            mDao.deleteMatch(mDao.getMatch(matchIds[i]));
+
+                                        }
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+
+                                                SharedPreferences sp = getSharedPreferences("PREFERENCE", MODE_PRIVATE);
+                                                sp.edit().clear().apply();
+                                                recreate();
+
+                                            }
+                                        });
+                                    }
+                                }).start();
+
+                            }
+                        });
+                        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
+                        });
+
+                        AlertDialog dialog = builder.create();
+
+                        dialog.show();
+
+                        break;
 
 
                 }
@@ -287,7 +341,24 @@ public class MatchAnalyseActivity extends AppCompatActivity {
 
                 matches = new ArrayList<>();
 
+                teams = mDao.getAllAndSort();
+                numberOfTeams = teams.size();
+
                 matches = mDao.getMatchesAndSort();
+                numberOfMatches = matches.size();
+
+                matchIds = new int[matches.size()];
+                teamIds = new int[teams.size()];
+
+                for(int i = 0; i < numberOfMatches; i++) {
+
+                    matchIds[i] = matches.get(i).getId();
+
+                }
+                for(int i = 0; i < numberOfTeams; i++) {
+
+                    teamIds[i] = teams.get(i).getId();
+                }
 
                 runOnUiThread(new Runnable() {
                     @Override

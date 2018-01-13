@@ -2,6 +2,7 @@ package com.javascouts.ftcanalysis;
 
 import android.arch.persistence.room.Room;
 import android.database.DataSetObserver;
+import android.os.Looper;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -65,6 +66,20 @@ public class NewMatchActivity extends AppCompatActivity {
 
                 teams = mDao.getAllAndSort();
                 numberOfTeams = teams.size();
+
+                if(numberOfTeams <= 0) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Toast t1 = new Toast(NewMatchActivity.this).makeText(NewMatchActivity.this, "Please add at least 1 team.", Toast.LENGTH_SHORT);
+                            t1.show();
+                            finish();
+
+                        }
+                    });
+                }
 
                 Log.d("RESUMING", "numberOfTeams: " + String.valueOf(numberOfTeams));
 
