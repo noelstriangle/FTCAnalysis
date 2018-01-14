@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.w3c.dom.Text;
 
 /**
@@ -61,10 +62,20 @@ public class MatchDetailsActivity extends AppCompatActivity {
 
                 match = mDao.getMatchByMatchNumber(matchNumber);
 
-                r1 = mDao.getTeamByTeamNumber(match.getRed1());
-                r2 = mDao.getTeamByTeamNumber(match.getRed2());
-                b1 = mDao.getTeamByTeamNumber(match.getBlue1());
-                b2 = mDao.getTeamByTeamNumber(match.getBlue2());
+                try {
+
+                    r1 = mDao.getTeamByTeamNumber(match.getRed1());
+                    r2 = mDao.getTeamByTeamNumber(match.getRed2());
+                    b1 = mDao.getTeamByTeamNumber(match.getBlue1());
+                    b2 = mDao.getTeamByTeamNumber(match.getBlue2());
+
+                } catch(NullPointerException e) {
+
+                    Toast toast = new Toast(MatchDetailsActivity.this).makeText(MatchDetailsActivity.this, "One or more teams don't exist.", Toast.LENGTH_SHORT);
+                    toast.show();
+                    finish();
+
+                }
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -159,97 +170,107 @@ public class MatchDetailsActivity extends AppCompatActivity {
         rlayout = findViewById(R.id.rlayout);
         blayout = findViewById(R.id.blayout);
 
-        TextView title = new TextView(this);
-        title.setText(makeAString(r1, r2, -1));
-        title.setTextColor(getResources().getColor(R.color.textColor2));
-        title.setTextSize(36);
-        title.setGravity(Gravity.CENTER_HORIZONTAL);
+        try {
 
-        TextView number = new TextView(this);
-        number.setText(makeAString(r1, r2, -2));
-        number.setTextColor(getResources().getColor(R.color.textColor2));
-        number.setTextSize(30);
-        number.setGravity(Gravity.CENTER_HORIZONTAL);
+            TextView title = new TextView(this);
+            title.setText(makeAString(r1, r2, -1));
+            title.setTextColor(getResources().getColor(R.color.textColor2));
+            title.setTextSize(36);
+            title.setGravity(Gravity.CENTER_HORIZONTAL);
 
-        TextView autonomous = new TextView(this);
-        autonomous.setText(makeAString(r1, r2, -3));
-        autonomous.setTextColor(getResources().getColor(R.color.textColor2));
-        autonomous.setTextSize(20);
-        autonomous.setGravity(Gravity.CENTER_HORIZONTAL);
-        TextView autonomous2 = new TextView(this);
+            TextView number = new TextView(this);
+            number.setText(makeAString(r1, r2, -2));
+            number.setTextColor(getResources().getColor(R.color.textColor2));
+            number.setTextSize(30);
+            number.setGravity(Gravity.CENTER_HORIZONTAL);
 
-        autonomous2.setText(makeAString(r1, r2, -3));
-        autonomous2.setTextColor(getResources().getColor(R.color.textColor2));
-        autonomous2.setTextSize(20);
-        autonomous2.setGravity(Gravity.CENTER_HORIZONTAL);
+            TextView autonomous = new TextView(this);
+            autonomous.setText(makeAString(r1, r2, -3));
+            autonomous.setTextColor(getResources().getColor(R.color.textColor2));
+            autonomous.setTextSize(20);
+            autonomous.setGravity(Gravity.CENTER_HORIZONTAL);
+            TextView autonomous2 = new TextView(this);
 
-        TextView autoJewel = new TextView(this);
-        autoJewel.setText(makeAString(r1, r2, 1));
-        autoJewel.setTextColor(getResources().getColor(R.color.textColor2));
-        autoJewel.setTextSize(16);
+            autonomous2.setText(makeAString(r1, r2, -3));
+            autonomous2.setTextColor(getResources().getColor(R.color.textColor2));
+            autonomous2.setTextSize(20);
+            autonomous2.setGravity(Gravity.CENTER_HORIZONTAL);
 
-        TextView autoGlyph = new TextView(this);
-        autoGlyph.setText(makeAString(r1, r2, 2));
-        autoGlyph.setTextColor(getResources().getColor(R.color.textColor2));
-        autoGlyph.setTextSize(16);
+            TextView autoJewel = new TextView(this);
+            autoJewel.setText(makeAString(r1, r2, 1));
+            autoJewel.setTextColor(getResources().getColor(R.color.textColor2));
+            autoJewel.setTextSize(16);
 
-        TextView autoCypher = new TextView(this);
-        autoCypher.setText(makeAString(r1, r2, 3));
-        autoCypher.setTextColor(getResources().getColor(R.color.textColor2));
-        autoCypher.setTextSize(16);
+            TextView autoGlyph = new TextView(this);
+            autoGlyph.setText(makeAString(r1, r2, 2));
+            autoGlyph.setTextColor(getResources().getColor(R.color.textColor2));
+            autoGlyph.setTextSize(16);
 
-        TextView autoPark = new TextView(this);
-        autoPark.setText(makeAString(r1, r2, 4));
-        autoPark.setTextColor(getResources().getColor(R.color.textColor2));
-        autoPark.setTextSize(16);
+            TextView autoCypher = new TextView(this);
+            autoCypher.setText(makeAString(r1, r2, 3));
+            autoCypher.setTextColor(getResources().getColor(R.color.textColor2));
+            autoCypher.setTextSize(16);
 
-        TextView title2 = new TextView(this);
-        title2.setText(makeAString(b1, b2, -1));
-        title2.setTextColor(getResources().getColor(R.color.textColor2));
-        title2.setTextSize(36);
-        title2.setGravity(Gravity.CENTER_HORIZONTAL);
+            TextView autoPark = new TextView(this);
+            autoPark.setText(makeAString(r1, r2, 4));
+            autoPark.setTextColor(getResources().getColor(R.color.textColor2));
+            autoPark.setTextSize(16);
 
-        TextView number2 = new TextView(this);
-        number2.setText(makeAString(b1, b2, -2));
-        number2.setTextColor(getResources().getColor(R.color.textColor2));
-        number2.setTextSize(30);
-        number2.setGravity(Gravity.CENTER_HORIZONTAL);
+            TextView title2 = new TextView(this);
+            title2.setText(makeAString(b1, b2, -1));
+            title2.setTextColor(getResources().getColor(R.color.textColor2));
+            title2.setTextSize(36);
+            title2.setGravity(Gravity.CENTER_HORIZONTAL);
 
-        TextView autoJewel2 = new TextView(this);
-        autoJewel2.setText(makeAString(b1, b2, 1));
-        autoJewel2.setTextColor(getResources().getColor(R.color.textColor2));
-        autoJewel2.setTextSize(16);
+            TextView number2 = new TextView(this);
+            number2.setText(makeAString(b1, b2, -2));
+            number2.setTextColor(getResources().getColor(R.color.textColor2));
+            number2.setTextSize(30);
+            number2.setGravity(Gravity.CENTER_HORIZONTAL);
 
-        TextView autoGlyph2 = new TextView(this);
-        autoGlyph2.setText(makeAString(b1, b2, 2));
-        autoGlyph2.setTextColor(getResources().getColor(R.color.textColor2));
-        autoGlyph2.setTextSize(16);
+            TextView autoJewel2 = new TextView(this);
+            autoJewel2.setText(makeAString(b1, b2, 1));
+            autoJewel2.setTextColor(getResources().getColor(R.color.textColor2));
+            autoJewel2.setTextSize(16);
 
-        TextView autoCypher2 = new TextView(this);
-        autoCypher2.setText(makeAString(b1, b2, 3));
-        autoCypher2.setTextColor(getResources().getColor(R.color.textColor2));
-        autoCypher2.setTextSize(16);
+            TextView autoGlyph2 = new TextView(this);
+            autoGlyph2.setText(makeAString(b1, b2, 2));
+            autoGlyph2.setTextColor(getResources().getColor(R.color.textColor2));
+            autoGlyph2.setTextSize(16);
 
-        TextView autoPark2 = new TextView(this);
-        autoPark2.setText(makeAString(b1, b2, 4));
-        autoPark2.setTextColor(getResources().getColor(R.color.textColor2));
-        autoPark2.setTextSize(16);
+            TextView autoCypher2 = new TextView(this);
+            autoCypher2.setText(makeAString(b1, b2, 3));
+            autoCypher2.setTextColor(getResources().getColor(R.color.textColor2));
+            autoCypher2.setTextSize(16);
 
-        rlayout.addView(title);
-        rlayout.addView(number);
-        rlayout.addView(autonomous);
-        rlayout.addView(autoJewel);
-        rlayout.addView(autoGlyph);
-        rlayout.addView(autoCypher);
-        rlayout.addView(autoPark);
+            TextView autoPark2 = new TextView(this);
+            autoPark2.setText(makeAString(b1, b2, 4));
+            autoPark2.setTextColor(getResources().getColor(R.color.textColor2));
+            autoPark2.setTextSize(16);
 
-        blayout.addView(title2);
-        blayout.addView(number2);
-        blayout.addView(autonomous2);
-        blayout.addView(autoJewel2);
-        blayout.addView(autoGlyph2);
-        blayout.addView(autoCypher2);
-        blayout.addView(autoPark2);
+            rlayout.addView(title);
+            rlayout.addView(number);
+            rlayout.addView(autonomous);
+            rlayout.addView(autoJewel);
+            rlayout.addView(autoGlyph);
+            rlayout.addView(autoCypher);
+            rlayout.addView(autoPark);
+
+            blayout.addView(title2);
+            blayout.addView(number2);
+            blayout.addView(autonomous2);
+            blayout.addView(autoJewel2);
+            blayout.addView(autoGlyph2);
+            blayout.addView(autoCypher2);
+            blayout.addView(autoPark2);
+
+        } catch(NullPointerException e) {
+
+            Toast toast = new Toast(MatchDetailsActivity.this).makeText(MatchDetailsActivity.this, "One or more teams don't exist.", Toast.LENGTH_SHORT);
+            toast.show();
+            finish();
+
+        }
 
     }
 

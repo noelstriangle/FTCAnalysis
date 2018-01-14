@@ -39,6 +39,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.javiersantos.appupdater.AppUpdater;
 import com.opencsv.CSVWriter;
 
 import org.apache.commons.lang3.StringUtils;
@@ -59,17 +60,20 @@ public class MainActivity extends AppCompatActivity {
     public int[] teamNums;
     public String[] teamNames;
     public int[] teamAutos;
-    public int[] teamTeles, teamIds;
+    public int[] teamTeles, teamIds, matchIds;
     public int teamTotal;
     private ListView mListView;
     public Intent intent;
 
+    public int numberOfMatches;
     private ListView tbl;
     private static Toast t;
     public List<Team> teams;
     public Team tempTeam;
     public List<Team> resumeTeams;
     public Team[] deleteTeams;
+    public List<Match> matches;
+    public Match tempMatch;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -93,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }).start();
+
+        AppUpdater appUpdate = new AppUpdater(this)
+                .setButtonDoNotShowAgain(null);
+        appUpdate.start();
 
         Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
                 .getBoolean("isFirstRun", true);
@@ -137,8 +145,8 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final SwipeRefreshLayout srl = findViewById(R.id.swiperefresh);
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -159,6 +167,8 @@ public class MainActivity extends AppCompatActivity {
 
                         teams = mDao.getAllAndSort();
                         numberOfTeams = teams.size();
+                        matches = mDao.getMatchesAndSort();
+                        numberOfMatches = matches.size();
 
                         Log.d("RESUMING", "numberOfTeams: " + String.valueOf(numberOfTeams));
 
@@ -167,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
                         teamAutos = new int[teams.size()];
                         teamTeles = new int[teams.size()];
                         teamIds = new int[teams.size()];
+                        matchIds = new int[matches.size()];
 
                         Log.d("RESUMING", "Arrays Created.");
 
@@ -181,6 +192,13 @@ public class MainActivity extends AppCompatActivity {
                             teamTeles[i] = tempTeam.getTelePoints();
 
                             Log.d("RESUMING", "teamInfo Updated: " + teamNums[i] + " " + teamNames[i] + " " + teamAutos[i] + " " + teamTeles[i]);
+
+                        }
+                        for(int i =0; i< numberOfMatches; i++) {
+
+                            tempMatch = matches.get(i);
+
+                            matchIds[i] = tempMatch.getId();
 
                         }
 
@@ -239,18 +257,42 @@ public class MainActivity extends AppCompatActivity {
                         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
-                                SharedPreferences sp = getSharedPreferences("PREFERENCE", MODE_PRIVATE);
-                                sp.edit().clear().apply();
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
 
+                                        if(numberOfTeams < 0) {
+
+                                            Toast t1 = new Toast(MainActivity.this).makeText(MainActivity.this, "No teams to reset.", Toast.LENGTH_SHORT);
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    mDrawerLayout.closeDrawers();
+                                                }
+                                            });
+                                            t1.show();
+                                        }
                                         for(int i = numberOfTeams-1; i >= 0; i--) {
 
                                             mDao.deleteAll(mDao.getTeam(teamIds[i]));
 
                                         }
+                                        for(int i = numberOfMatches-1; i>= 0; i--) {
 
+                                            mDao.deleteMatch(mDao.getMatch(matchIds[i]));
+
+                                        }
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+
+                                                SharedPreferences sp = getSharedPreferences("PREFERENCE", MODE_PRIVATE);
+                                                sp.edit().clear().apply();
+                                                recreate();
+
+                                            }
+                                        });
                                     }
                                 }).start();
 
@@ -481,6 +523,8 @@ public class MainActivity extends AppCompatActivity {
 
                 teams = mDao.getAllAndSort();
                 numberOfTeams = teams.size();
+                matches = mDao.getMatchesAndSort();
+                numberOfMatches = matches.size();
 
                 Log.d("RESUMING", "numberOfTeams: " + String.valueOf(numberOfTeams));
 
