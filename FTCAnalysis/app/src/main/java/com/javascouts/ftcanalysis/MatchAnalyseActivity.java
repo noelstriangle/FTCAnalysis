@@ -43,6 +43,9 @@ public class MatchAnalyseActivity extends AppCompatActivity {
     private TeamDatabase mDb;
     private TeamDao mDao;
     private List<Match> matches;
+    private List<Team> teams;
+    private Match tempMatch;
+    private Team tempTeam;
     private static Toast t;
 
     @Override
@@ -286,8 +289,39 @@ public class MatchAnalyseActivity extends AppCompatActivity {
                 Log.d("RESUMING", "Database Instantiated.");
 
                 matches = new ArrayList<>();
+                teams = new ArrayList<>();
 
                 matches = mDao.getMatchesAndSort();
+                teams = mDao.getAllAndSort();
+
+                for(int i = 0; i < matches.size(); i++) {
+
+                    tempMatch = matches.get(i);
+
+                    if(!teams.contains(mDao.getTeamByTeamNumber(tempMatch.getBlue1())) ||
+                            !teams.contains(mDao.getTeamByTeamNumber(tempMatch.getBlue2())) ||
+                            !teams.contains(mDao.getTeamByTeamNumber(tempMatch.getRed1())) ||
+                            !teams.contains(mDao.getTeamByTeamNumber(tempMatch.getRed2()))) {
+
+                        if(!teams.contains(mDao.getTeam(mDao.getIdByTeamNumber(tempMatch.getBlue1()))) ||
+                                !teams.contains(mDao.getTeam(mDao.getIdByTeamNumber(tempMatch.getBlue2()))) ||
+                                !teams.contains(mDao.getTeam(mDao.getIdByTeamNumber(tempMatch.getRed1()))) ||
+                                !teams.contains(mDao.getTeam(mDao.getIdByTeamNumber(tempMatch.getRed2())))) {
+
+                            mDao.deleteMatch(tempMatch);
+
+                        }
+
+                        tempMatch.setBlue1(mDao.getTeam(mDao.getIdByTeamNumber(tempMatch.getBlue1())).getTeamNumber());
+                        tempMatch.setBlue2(mDao.getTeam(mDao.getIdByTeamNumber(tempMatch.getBlue2())).getTeamNumber());
+                        tempMatch.setRed1(mDao.getTeam(mDao.getIdByTeamNumber(tempMatch.getRed1())).getTeamNumber());
+                        tempMatch.setRed2(mDao.getTeam(mDao.getIdByTeamNumber(tempMatch.getRed2())).getTeamNumber());
+
+                        matches = mDao.getMatchesAndSort();
+
+                    }
+
+                }
 
                 runOnUiThread(new Runnable() {
                     @Override

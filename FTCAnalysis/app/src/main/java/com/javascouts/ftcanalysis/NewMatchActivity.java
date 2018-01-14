@@ -131,6 +131,10 @@ public class NewMatchActivity extends AppCompatActivity {
                     tempMatch.setBlue2(b2);
                     tempMatch.setRed1(r1);
                     tempMatch.setRed2(r2);
+                    tempMatch.setBlue1id(mDao.getIdByTeamNumber(b1));
+                    tempMatch.setBlue2id(mDao.getIdByTeamNumber(b2));
+                    tempMatch.setRed1id(mDao.getIdByTeamNumber(r1));
+                    tempMatch.setRed2id(mDao.getIdByTeamNumber(r2));
 
                 } catch(NumberFormatException e) {
 

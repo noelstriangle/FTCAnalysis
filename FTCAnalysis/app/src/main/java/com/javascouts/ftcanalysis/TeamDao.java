@@ -36,6 +36,9 @@ public interface TeamDao {
     @Query("SELECT * FROM matches WHERE match_number = :mN")
     Match getMatchByMatchNumber(int mN);
 
+    @Query("SELECT id FROM teams WHERE team_number = :tN")
+    int getIdByTeamNumber(int tN);
+
     @Insert
     void insertAll(Team... teams);
 
