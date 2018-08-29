@@ -2,6 +2,7 @@ package com.javascouts.ftcanalysis;
 
 import android.arch.persistence.room.Room;
 import android.database.DataSetObserver;
+import android.os.Looper;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ public class NewMatchActivity extends AppCompatActivity {
     TeamDatabase mDb;
     TeamDao mDao;
     List<Team> teams;
+    List<Match> matches;
     int numberOfTeams;
     Integer[] teamNums;
     Team tempTeam;
@@ -65,6 +67,23 @@ public class NewMatchActivity extends AppCompatActivity {
 
                 teams = mDao.getAllAndSort();
                 numberOfTeams = teams.size();
+
+                matches = new ArrayList<>();
+                matches = mDao.getMatchesAndSort();
+
+                if(numberOfTeams <= 0) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Toast t1 = new Toast(NewMatchActivity.this).makeText(NewMatchActivity.this, "Please add at least 1 team.", Toast.LENGTH_SHORT);
+                            t1.show();
+                            finish();
+
+                        }
+                    });
+                }
 
                 Log.d("RESUMING", "numberOfTeams: " + String.valueOf(numberOfTeams));
 
@@ -131,6 +150,10 @@ public class NewMatchActivity extends AppCompatActivity {
                     tempMatch.setBlue2(b2);
                     tempMatch.setRed1(r1);
                     tempMatch.setRed2(r2);
+                    tempMatch.setBlue1id(mDao.getIdByTeamNumber(b1));
+                    tempMatch.setBlue2id(mDao.getIdByTeamNumber(b2));
+                    tempMatch.setRed1id(mDao.getIdByTeamNumber(r1));
+                    tempMatch.setRed2id(mDao.getIdByTeamNumber(r2));
 
                 } catch(NumberFormatException e) {
 
@@ -143,6 +166,18 @@ public class NewMatchActivity extends AppCompatActivity {
                     });
 
                     return;
+
+                }
+
+                if(matches.contains(mDao.getMatchByMatchNumber(mN))) {
+                runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast t = new Toast(NewMatchActivity.this).makeText(NewMatchActivity.this, "This match number is already taken.", Toast.LENGTH_SHORT);
+                            t.show();
+                            finish();
+                        }
+                    });
 
                 }
 

@@ -28,6 +28,7 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.List;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -47,6 +48,7 @@ public class ScoutTeamActivity extends AppCompatActivity {
     private static final int SELECT_PHOTO = 100;
     private InputStream imageStream;
     private Bitmap image;
+    private List<Team> teams;
 
     private Animator mCurrentAnimator;
     private int mShortAnimationDuration;
@@ -59,6 +61,14 @@ public class ScoutTeamActivity extends AppCompatActivity {
         db = Room.databaseBuilder(getApplicationContext(),
                 TeamDatabase.class, "team-database").build();
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                teams = db.getTeamDao().getAllAndSort();
+
+            }
+        }).start();
         Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
         myToolbar.setTitleTextColor(getResources().getColor(R.color.textColor));
@@ -232,6 +242,7 @@ public class ScoutTeamActivity extends AppCompatActivity {
             @Override
             public void run() {
 
+                teams = db.getTeamDao().getAllAndSort();
                 tempTeam = new Team();
 
                 try {
@@ -253,6 +264,21 @@ public class ScoutTeamActivity extends AppCompatActivity {
                     });
                     return;
 
+                }
+
+                if(teams.contains(db.getTeamDao().getTeamByTeamNumber(teamNumi))) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Toast toast = new Toast(ScoutTeamActivity.this).makeText(ScoutTeamActivity.this, "Team Number Already Exists", Toast.LENGTH_LONG);
+                            toast.show();
+                            finish();
+
+                        }
+                    });
+                    return;
                 }
 
                 jewelb = jewel.isChecked();
@@ -294,7 +320,10 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
                 tempTeam.setAutoPoints((changeBoolToInt(jewelb) * 30) + (changeBoolToInt(glyphAutob) * 15) + (changeBoolToInt(autoCypherb) * 30) + (changeBoolToInt(safeZoneb) * 10));
                 tempTeam.setTelePoints((glyphBari * 2) + (rowBari * 10) + (columnBari * 20) +
-                        (changeBoolToInt(endGameCypherb) * 30) + (relicBari * (10 * (2 ^ relicZoneBari - 1)) + (changeBoolToInt(uprightb) * 15)) + (changeBoolToInt(balanceb) * 20));
+                        (changeBoolToInt(endGameCypherb) * 30) + (relicBari * changeZoneToPoints(relicZoneBari)) + (changeBoolToInt(balanceb) * 20) + (changeBoolToInt(uprightb) * 15));
+
+                db = Room.databaseBuilder(getApplicationContext(),
+                        TeamDatabase.class, "team-database").build();
 
                 addTeam(db, tempTeam);
 
@@ -375,6 +404,25 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
     }
 
+    public int changeZoneToPoints(int value) {
+
+        int temp = 0;
+        if(value == 0) {
+
+            temp = 0;
+        } else if(value == 1) {
+
+            temp = 10;
+        } else if(value == 2) {
+
+            temp = 20;
+        } else if(value == 3) {
+
+            temp = 40;
+        }
+        return temp;
+    }
+
     private static void addTeam(final TeamDatabase db, Team team) {
 
         db.TeamDao().insertAll(team);
@@ -385,8 +433,6 @@ public class ScoutTeamActivity extends AppCompatActivity {
     protected void onPause() {
 
         super.onPause();
-
-        db.close();
 
     }
 
