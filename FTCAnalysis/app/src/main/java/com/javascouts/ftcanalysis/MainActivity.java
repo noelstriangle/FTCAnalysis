@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.drm.DrmStore;
 import android.media.Image;
 import android.os.Environment;
+import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -194,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("RESUMING", "teamInfo Updated: " + teamNums[i] + " " + teamNames[i] + " " + teamAutos[i] + " " + teamTeles[i]);
 
                         }
-                        for(int i =0; i< numberOfMatches; i++) {
+                        for(int i =0; i < numberOfMatches; i++) {
 
                             tempMatch = matches.get(i);
 
@@ -261,27 +262,45 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
 
-                                        if(numberOfTeams < 0) {
+                                        if(teamIds == null) {
 
-                                            Toast t1 = new Toast(MainActivity.this).makeText(MainActivity.this, "No teams to reset.", Toast.LENGTH_SHORT);
                                             runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
+                                                    Toast t1 = new Toast(MainActivity.this).makeText(MainActivity.this, "No teams to reset.", Toast.LENGTH_SHORT);
                                                     mDrawerLayout.closeDrawers();
+                                                    t1.show();
                                                 }
                                             });
-                                            t1.show();
-                                        }
-                                        for(int i = numberOfTeams-1; i >= 0; i--) {
 
-                                            mDao.deleteAll(mDao.getTeam(teamIds[i]));
+                                        } else {
 
-                                        }
-                                        for(int i = numberOfMatches-1; i>= 0; i--) {
+                                            for(int i = numberOfTeams-1; i >= 0; i--) {
 
-                                            mDao.deleteMatch(mDao.getMatch(matchIds[i]));
+                                                mDao.deleteAll(mDao.getTeam(teamIds[i]));
+
+                                            }
 
                                         }
+                                        if(matchIds == null) {
+
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast t1 = new Toast(MainActivity.this).makeText(MainActivity.this, "No teams to reset.", Toast.LENGTH_SHORT);
+                                                    mDrawerLayout.closeDrawers();
+                                                    t1.show();
+                                                }
+                                            });
+
+                                        } else {
+                                            for(int i = numberOfMatches-1; i>= 0; i--) {
+
+                                                mDao.deleteMatch(mDao.getMatch(matchIds[i]));
+
+                                            }
+                                        }
+
 
                                         runOnUiThread(new Runnable() {
                                             @Override

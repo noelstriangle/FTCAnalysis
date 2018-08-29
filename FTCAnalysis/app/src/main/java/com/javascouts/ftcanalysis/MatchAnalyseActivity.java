@@ -147,7 +147,7 @@ public class MatchAnalyseActivity extends AppCompatActivity {
 
                                                 SharedPreferences sp = getSharedPreferences("PREFERENCE", MODE_PRIVATE);
                                                 sp.edit().clear().apply();
-                                                recreate();
+                                                navigateUpTo(new Intent(MatchAnalyseActivity.this, MainActivity.class));
 
                                             }
                                         });
@@ -393,6 +393,16 @@ public class MatchAnalyseActivity extends AppCompatActivity {
         intent.putExtra("MATCH_NUMBER", matchNum);
         //Log.d("TESTING", "Extra:" + String.valueOf(matchNum) + " set.");
         startActivity(intent);
+
+    }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        init();
+
 
     }
 

@@ -28,6 +28,7 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.List;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -47,6 +48,7 @@ public class ScoutTeamActivity extends AppCompatActivity {
     private static final int SELECT_PHOTO = 100;
     private InputStream imageStream;
     private Bitmap image;
+    private List<Team> teams;
 
     private Animator mCurrentAnimator;
     private int mShortAnimationDuration;
@@ -59,6 +61,14 @@ public class ScoutTeamActivity extends AppCompatActivity {
         db = Room.databaseBuilder(getApplicationContext(),
                 TeamDatabase.class, "team-database").build();
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                teams = db.getTeamDao().getAllAndSort();
+
+            }
+        }).start();
         Toolbar myToolbar = findViewById(R.id.toolbarST);
         setSupportActionBar(myToolbar);
         myToolbar.setTitleTextColor(getResources().getColor(R.color.textColor));
@@ -232,6 +242,7 @@ public class ScoutTeamActivity extends AppCompatActivity {
             @Override
             public void run() {
 
+                teams = db.getTeamDao().getAllAndSort();
                 tempTeam = new Team();
 
                 try {
@@ -253,6 +264,21 @@ public class ScoutTeamActivity extends AppCompatActivity {
                     });
                     return;
 
+                }
+
+                if(teams.contains(db.getTeamDao().getTeamByTeamNumber(teamNumi))) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Toast toast = new Toast(ScoutTeamActivity.this).makeText(ScoutTeamActivity.this, "Team Number Already Exists", Toast.LENGTH_LONG);
+                            toast.show();
+                            finish();
+
+                        }
+                    });
+                    return;
                 }
 
                 jewelb = jewel.isChecked();

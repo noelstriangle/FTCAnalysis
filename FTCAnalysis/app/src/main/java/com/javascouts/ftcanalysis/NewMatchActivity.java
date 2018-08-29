@@ -26,6 +26,7 @@ public class NewMatchActivity extends AppCompatActivity {
     TeamDatabase mDb;
     TeamDao mDao;
     List<Team> teams;
+    List<Match> matches;
     int numberOfTeams;
     Integer[] teamNums;
     Team tempTeam;
@@ -66,6 +67,9 @@ public class NewMatchActivity extends AppCompatActivity {
 
                 teams = mDao.getAllAndSort();
                 numberOfTeams = teams.size();
+
+                matches = new ArrayList<>();
+                matches = mDao.getMatchesAndSort();
 
                 if(numberOfTeams <= 0) {
 
@@ -158,6 +162,18 @@ public class NewMatchActivity extends AppCompatActivity {
                     });
 
                     return;
+
+                }
+
+                if(matches.contains(mDao.getMatchByMatchNumber(mN))) {
+                runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast t = new Toast(NewMatchActivity.this).makeText(NewMatchActivity.this, "This match number is already taken.", Toast.LENGTH_SHORT);
+                            t.show();
+                            finish();
+                        }
+                    });
 
                 }
 
