@@ -149,7 +149,7 @@ public class MatchAnalyseActivity extends AppCompatActivity {
 
                                                 SharedPreferences sp = getSharedPreferences("PREFERENCE", MODE_PRIVATE);
                                                 sp.edit().clear().apply();
-                                                recreate();
+                                                navigateUpTo(new Intent(MatchAnalyseActivity.this, MainActivity.class));
 
                                             }
                                         });
@@ -470,12 +470,20 @@ public class MatchAnalyseActivity extends AppCompatActivity {
 
     }
 
+<<<<<<< HEAD
+=======
+    @Override
+>>>>>>> 6c309ead82d91154dc3cff01027b416337fe01db
     public void onResume() {
 
         super.onResume();
 
         init();
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6c309ead82d91154dc3cff01027b416337fe01db
     }
 
 }
