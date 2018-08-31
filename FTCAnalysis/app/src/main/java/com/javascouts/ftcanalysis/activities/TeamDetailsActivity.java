@@ -1,4 +1,4 @@
-package com.javascouts.ftcanalysis;
+package com.javascouts.ftcanalysis.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -28,6 +28,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.app.ActionBar;
+
+import com.javascouts.ftcanalysis.R;
+import com.javascouts.ftcanalysis.database.Team;
+import com.javascouts.ftcanalysis.database.TeamDao;
+import com.javascouts.ftcanalysis.database.TeamDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;

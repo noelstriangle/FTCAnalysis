@@ -1,22 +1,22 @@
-package com.javascouts.ftcanalysis;
+package com.javascouts.ftcanalysis.activities;
 
 import android.arch.persistence.room.Room;
-import android.database.DataSetObserver;
-import android.os.Looper;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.commons.lang3.ObjectUtils;
+import com.javascouts.ftcanalysis.database.Match;
+import com.javascouts.ftcanalysis.R;
+import com.javascouts.ftcanalysis.database.Team;
+import com.javascouts.ftcanalysis.database.TeamDao;
+import com.javascouts.ftcanalysis.database.TeamDatabase;
 
 import java.util.ArrayList;
 import java.util.List;

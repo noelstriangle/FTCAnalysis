@@ -1,4 +1,4 @@
-package com.javascouts.ftcanalysis;
+package com.javascouts.ftcanalysis.activities;
 
 import android.app.AlertDialog;
 import android.arch.persistence.room.Room;
@@ -7,14 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.drm.DrmStore;
-import android.media.Image;
 import android.os.Environment;
-import android.os.Looper;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -22,25 +17,22 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.javiersantos.appupdater.AppUpdater;
+import com.javascouts.ftcanalysis.database.Match;
+import com.javascouts.ftcanalysis.R;
+import com.javascouts.ftcanalysis.database.Team;
+import com.javascouts.ftcanalysis.adapters.TeamAdapter;
+import com.javascouts.ftcanalysis.database.TeamDao;
+import com.javascouts.ftcanalysis.database.TeamDatabase;
 import com.opencsv.CSVWriter;
 
 import org.apache.commons.lang3.StringUtils;
@@ -48,7 +40,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {

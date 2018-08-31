@@ -1,4 +1,4 @@
-package com.javascouts.ftcanalysis;
+package com.javascouts.ftcanalysis.activities;
 
 import android.arch.persistence.room.Room;
 import android.os.Bundle;
@@ -11,6 +11,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.javascouts.ftcanalysis.database.Match;
+import com.javascouts.ftcanalysis.R;
+import com.javascouts.ftcanalysis.database.Team;
+import com.javascouts.ftcanalysis.database.TeamDao;
+import com.javascouts.ftcanalysis.database.TeamDatabase;
 
 import java.util.ArrayList;
 import java.util.List;

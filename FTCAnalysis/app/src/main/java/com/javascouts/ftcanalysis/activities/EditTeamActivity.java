@@ -1,4 +1,4 @@
-package com.javascouts.ftcanalysis;
+package com.javascouts.ftcanalysis.activities;
 
 import android.animation.Animator;
 import android.arch.persistence.room.Room;
@@ -18,12 +18,16 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.javascouts.ftcanalysis.R;
+import com.javascouts.ftcanalysis.database.Team;
+import com.javascouts.ftcanalysis.database.TeamDao;
+import com.javascouts.ftcanalysis.database.TeamDatabase;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 
 public class EditTeamActivity extends AppCompatActivity {
 

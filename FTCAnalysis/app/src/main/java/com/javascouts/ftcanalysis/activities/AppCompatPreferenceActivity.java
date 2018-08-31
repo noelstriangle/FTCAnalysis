@@ -1,4 +1,4 @@
-package com.javascouts.ftcanalysis;
+package com.javascouts.ftcanalysis.activities;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package com.javascouts.ftcanalysis;
+package com.javascouts.ftcanalysis.activities;
 
 
 import android.app.AlertDialog;
@@ -16,8 +16,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.commons.lang3.ObjectUtils;
-import org.w3c.dom.Text;
+import com.javascouts.ftcanalysis.database.Match;
+import com.javascouts.ftcanalysis.R;
+import com.javascouts.ftcanalysis.database.Team;
+import com.javascouts.ftcanalysis.database.TeamDao;
+import com.javascouts.ftcanalysis.database.TeamDatabase;
 
 /**
  * Created by Liam on 12/9/2017.

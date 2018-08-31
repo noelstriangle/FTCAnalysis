@@ -1,44 +1,38 @@
-package com.javascouts.ftcanalysis;
+package com.javascouts.ftcanalysis.activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.CheckBox;
-import android.widget.ImageView;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.EditText;
-import android.support.v7.app.ActionBar;
 import android.widget.Toast;
+
+import com.javascouts.ftcanalysis.R;
+import com.javascouts.ftcanalysis.database.Team;
+import com.javascouts.ftcanalysis.database.TeamDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.List;
 
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
-
-public class ScoutTeamActivity extends AppCompatActivity {
+public class FirstRunActivity extends AppCompatActivity {
 
     private SeekBar glyphBar, rowBar, columnBar, relicBar, relicZoneBar;
     private TextView glyphText, rowText, columnText, relicText, relicZoneText;
     private EditText teamText, teamNum, description;
-    private CheckBox jewel, glyphAuto, safeZone, autoCypher, endGameCypher, upright, balance;
+    private CheckBox jewel, glyphAuto, safeZone, autoCypher, endGameCypher, upright, balance, onFTC;
+    private View scout;
 
     private boolean jewelb, glyphAutob, autoCypherb, safeZoneb, endGameCypherb, uprightb, balanceb;
     private int glyphBari, rowBari, columnBari, relicBari, relicZoneBari, teamNumi;
@@ -48,41 +42,30 @@ public class ScoutTeamActivity extends AppCompatActivity {
     private static final int SELECT_PHOTO = 100;
     private InputStream imageStream;
     private Bitmap image;
-    private List<Team> teams;
 
-    private Animator mCurrentAnimator;
-    private int mShortAnimationDuration;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scout_team);
-
-        db = Room.databaseBuilder(getApplicationContext(),
-                TeamDatabase.class, "team-database").build();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                teams = db.getTeamDao().getAllAndSort();
-
-            }
-        }).start();
-        Toolbar myToolbar = findViewById(R.id.toolbarST);
-        setSupportActionBar(myToolbar);
-        myToolbar.setTitleTextColor(getResources().getColor(R.color.textColor));
+        setContentView(R.layout.activity_first_run);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
 
-        actionBar.setTitle("Scout New Team");
+        actionBar.setTitle("Setup");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.textColor2));
 
-        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        db = Room.databaseBuilder(getApplicationContext(),
+                TeamDatabase.class, "team-database").build();
 
         jewel = findViewById(R.id.jewel);
         glyphAuto = findViewById(R.id.glyphAuto);
         autoCypher = findViewById(R.id.autoCypher);
         safeZone = findViewById(R.id.safeZone);
+
+        onFTC = findViewById(R.id.onFTC);
+        scout = findViewById(R.id.scout);
 
         endGameCypher = findViewById(R.id.endGameCypher);
         upright = findViewById(R.id.upright);
@@ -205,28 +188,24 @@ public class ScoutTeamActivity extends AppCompatActivity {
             }
         });
 
+        onFTC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if(isChecked) {
+
+                    scout.setVisibility(View.VISIBLE);
+
+                } else {
+
+                    scout.setVisibility(View.INVISIBLE);
+
+                }
+
+            }
+        });
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
-    }
-
-    @Override
-    protected void onDestroy() {
-
-        jewelb = FALSE;
-        glyphAutob = FALSE;
-        autoCypherb = FALSE;
-        safeZoneb = FALSE;
-        endGameCypherb = FALSE;
-        uprightb = FALSE;
-        glyphBari = 0;
-        rowBari = 0;
-        columnBari = 0;
-        relicBari = 0;
-        relicZoneBari = 0;
-        teamNumi = 0;
-        teamTexts = "";
-        TeamDatabase.destroyInstance();
-        super.onDestroy();
 
     }
 
@@ -236,13 +215,41 @@ public class ScoutTeamActivity extends AppCompatActivity {
         startActivityForResult(photoPickerIntent, SELECT_PHOTO);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch(requestCode) {
+            case SELECT_PHOTO:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    try {
+                        imageStream = getContentResolver().openInputStream(selectedImage);
+                    } catch(FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        image = decodeUri(selectedImage);
+                    } catch(FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+        }
+
+    }
+
     public void getInfoAndKill(android.view.View view) {
+
+        if(onFTC.isChecked()) {
+
+            finish();
+
+        }
 
         new Thread(new Runnable() {
             @Override
             public void run() {
 
-                teams = db.getTeamDao().getAllAndSort();
                 tempTeam = new Team();
 
                 try {
@@ -257,28 +264,13 @@ public class ScoutTeamActivity extends AppCompatActivity {
                         @Override
                         public void run() {
 
-                            Toast toast = new Toast(ScoutTeamActivity.this).makeText(ScoutTeamActivity.this, "Team Number Unspecified", Toast.LENGTH_LONG);
+                            Toast toast = new Toast(FirstRunActivity.this).makeText(FirstRunActivity.this, "Team Number Unspecified", Toast.LENGTH_LONG);
                             toast.show();
 
                         }
                     });
                     return;
 
-                }
-
-                if(teams.contains(db.getTeamDao().getTeamByTeamNumber(teamNumi))) {
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            Toast toast = new Toast(ScoutTeamActivity.this).makeText(ScoutTeamActivity.this, "Team Number Already Exists", Toast.LENGTH_LONG);
-                            toast.show();
-                            finish();
-
-                        }
-                    });
-                    return;
                 }
 
                 jewelb = jewel.isChecked();
@@ -311,7 +303,7 @@ public class ScoutTeamActivity extends AppCompatActivity {
                 tempTeam.setUprightb(uprightb);
                 tempTeam.setBalanceb(balanceb);
                 tempTeam.setOtherNotes(teamInfos);
-                tempTeam.setIsUser(false);
+                tempTeam.setIsUser(true);
                 try {
                     tempTeam.setImage(getBytes(image));
                 } catch(NullPointerException e) {
@@ -320,10 +312,7 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
                 tempTeam.setAutoPoints((changeBoolToInt(jewelb) * 30) + (changeBoolToInt(glyphAutob) * 15) + (changeBoolToInt(autoCypherb) * 30) + (changeBoolToInt(safeZoneb) * 10));
                 tempTeam.setTelePoints((glyphBari * 2) + (rowBari * 10) + (columnBari * 20) +
-                        (changeBoolToInt(endGameCypherb) * 30) + (relicBari * changeZoneToPoints(relicZoneBari)) + (changeBoolToInt(balanceb) * 20) + (changeBoolToInt(uprightb) * 15));
-
-                db = Room.databaseBuilder(getApplicationContext(),
-                        TeamDatabase.class, "team-database").build();
+                        (changeBoolToInt(endGameCypherb) * 30) + (relicBari * (10 * (2 ^ relicZoneBari - 1)) + (changeBoolToInt(uprightb) * 15)) + (changeBoolToInt(balanceb) * 20));
 
                 addTeam(db, tempTeam);
 
@@ -334,29 +323,6 @@ public class ScoutTeamActivity extends AppCompatActivity {
         TeamDatabase.destroyInstance();
 
         finish();
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-
-        switch(requestCode) {
-            case SELECT_PHOTO:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    try {
-                        imageStream = getContentResolver().openInputStream(selectedImage);
-                    } catch(FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        image = decodeUri(selectedImage);
-                    } catch(FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-        }
 
     }
 
@@ -404,25 +370,6 @@ public class ScoutTeamActivity extends AppCompatActivity {
 
     }
 
-    public int changeZoneToPoints(int value) {
-
-        int temp = 0;
-        if(value == 0) {
-
-            temp = 0;
-        } else if(value == 1) {
-
-            temp = 10;
-        } else if(value == 2) {
-
-            temp = 20;
-        } else if(value == 3) {
-
-            temp = 40;
-        }
-        return temp;
-    }
-
     private static void addTeam(final TeamDatabase db, Team team) {
 
         db.TeamDao().insertAll(team);
@@ -452,6 +399,4 @@ public class ScoutTeamActivity extends AppCompatActivity {
             return b;
         }
     }
-
 }
-

@@ -1,4 +1,4 @@
-package com.javascouts.ftcanalysis;
+package com.javascouts.ftcanalysis.database;
 
 /**
  * Created by seed on 12/5/17.

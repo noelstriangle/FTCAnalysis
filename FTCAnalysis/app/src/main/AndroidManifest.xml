@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,56 +22,56 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ScoutTeamActivity"
-            android:parentActivityName=".MainActivity">
+            android:name=".activities.ScoutTeamActivity"
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.javascouts.ftcanalysis.MainActivity" />
+                android:value="com.javascouts.ftcanalysis.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".TeamDetailsActivity"
-            android:parentActivityName=".MainActivity">
+            android:name=".activities.TeamDetailsActivity"
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.javascouts.ftcanalysis.MainActivity" />
+                android:value="com.javascouts.ftcanalysis.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".EditTeamActivity"
-            android:parentActivityName=".TeamDetailsActivity">
+            android:name=".activities.EditTeamActivity"
+            android:parentActivityName=".activities.TeamDetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.javascouts.ftcanalysis.MainActivity" />
+                android:value="com.javascouts.ftcanalysis.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".MatchAnalyseActivity"
+            android:name=".activities.MatchAnalyseActivity"
             android:launchMode="singleInstance" />
         <activity
-            android:name=".FirstRunActivity"
+            android:name=".activities.FirstRunActivity"
             android:label="@string/title_activity_first_run"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.javascouts.ftcanalysis.MainActivity" />
+                android:value="com.javascouts.ftcanalysis.activities.MainActivity" />
         </activity>
-        <activity android:name=".NewMatchActivity">
+        <activity android:name=".activities.NewMatchActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.javascouts.ftcanalysis.MatchAnalyseActivity" />
+                android:value="com.javascouts.ftcanalysis.activities.MatchAnalyseActivity" />
         </activity>
-        <activity android:name=".MatchDetailsActivity">
+        <activity android:name=".activities.MatchDetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MatchAnalyseActivity" />
+                android:value=".activities.MatchAnalyseActivity" />
         </activity>
-        <activity android:name=".AboutActivity">
+        <activity android:name=".activities.AboutActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value=".activities.MainActivity"/>
 
         </activity>
     </application>
