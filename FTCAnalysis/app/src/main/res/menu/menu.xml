@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/cleanseTeams"
+        android:title="@string/delete_all_teams" />
+    <item
+        android:id="@+id/cleanseMatches"
+        android:title="@string/delete_all_matches" />
+    <item
+        android:id="@+id/deleteTeam"
+        android:title="@string/delete_team" />
+    <item
+        android:id="@+id/deleteMatch"
+        android:title="@string/delete_match" />
+    <item
+        android:id="@+id/export"
+        android:title="@string/export_teams" />
+    <item
+        android:id="@+id/export2"
+        android:title="@string/export_matches" />
+    <item
+        android:id="@+id/inport"
+        android:title="@string/import_teams" />
+    <item
+        android:id="@+id/inport2"
+        android:title="@string/import_matches" />
+    <item
+        android:id="@+id/settings"
+        android:title="@string/settings" />
+
+</menu>

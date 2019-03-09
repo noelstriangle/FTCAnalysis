@@ -1,7 +1,8 @@
 package com.javascouts.ftcanalysis.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.javascouts.ftcanalysis.R;
-import com.javascouts.ftcanalysis.database.Team;
+import com.javascouts.ftcanalysis.room.Team;
 
 import java.util.List;
-
-/**
- * Created by seed on 12/29/17.
- */
 
 public class TeamAdapter extends ArrayAdapter<Team> {
 
@@ -31,8 +28,11 @@ public class TeamAdapter extends ArrayAdapter<Team> {
 
     }
 
+
+    @NonNull
+    @SuppressLint({"InflateParams", "SetTextI18n"})
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
         View v = convertView;
 
@@ -40,7 +40,7 @@ public class TeamAdapter extends ArrayAdapter<Team> {
 
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
-            v = vi.inflate(R.layout.content_row, null);
+            v = vi.inflate(R.layout.content_teamrow, null);
 
         }
 
@@ -51,25 +51,22 @@ public class TeamAdapter extends ArrayAdapter<Team> {
             TextView tt2 = v.findViewById(R.id.subTitleText);
             TextView tt3 = v.findViewById(R.id.pointsText);
 
-            if(p.getIsUser()) {
+            /*v.setBackgroundColor(Color.rgb(37, 130, 41));
+            tt1.setTextColor(Color.rgb(255, 202, 43));
+            tt2.setTextColor(Color.rgb(255,202,43));
+            tt3.setTextColor(Color.rgb(255,202,43));*/
 
-                v.setBackgroundColor(Color.rgb(37, 130, 41));
-                tt1.setTextColor(Color.rgb(255, 202, 43));
-                tt2.setTextColor(Color.rgb(255,202,43));
-                tt3.setTextColor(Color.rgb(255,202,43));
-
-            }
 
             if (tt1 != null) {
-                tt1.setText(p.getTeamName());
+                tt1.setText(p.teamName);
             }
 
             if (tt2 != null) {
-                tt2.setText(String.valueOf(p.getTeamNumber()));
+                tt2.setText("Team " + String.valueOf(p.teamNumber));
             }
 
             if (tt3 != null) {
-                tt3.setText(String.valueOf(p.getTelePoints() + p.getAutoPoints()));
+                tt3.setText("Avg Points: " + '\n' + String.valueOf(p.telePoints + p.autoPoints + p.endPoints));
             }
         }
 

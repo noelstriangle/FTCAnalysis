@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.javascouts.ftcanalysis">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -11,68 +12,16 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/java_scouting_logo"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".activities.MainActivity"
-            android:launchMode="singleInstance">
+            android:name=".MainActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".activities.ScoutTeamActivity"
-            android:parentActivityName=".activities.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.javascouts.ftcanalysis.activities.MainActivity" />
-        </activity>
-        <activity
-            android:name=".activities.TeamDetailsActivity"
-            android:parentActivityName=".activities.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.javascouts.ftcanalysis.activities.MainActivity" />
-        </activity>
-        <activity
-            android:name=".activities.EditTeamActivity"
-            android:parentActivityName=".activities.TeamDetailsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.javascouts.ftcanalysis.activities.MainActivity" />
-        </activity>
-        <activity
-            android:name=".activities.MatchAnalyseActivity"
-            android:launchMode="singleInstance" />
-        <activity
-            android:name=".activities.FirstRunActivity"
-            android:label="@string/title_activity_first_run"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".activities.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.javascouts.ftcanalysis.activities.MainActivity" />
-        </activity>
-        <activity android:name=".activities.NewMatchActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.javascouts.ftcanalysis.activities.MatchAnalyseActivity" />
-        </activity>
-        <activity android:name=".activities.MatchDetailsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MatchAnalyseActivity" />
-        </activity>
-        <activity android:name=".activities.AboutActivity">
-
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MainActivity"/>
-
         </activity>
     </application>
 

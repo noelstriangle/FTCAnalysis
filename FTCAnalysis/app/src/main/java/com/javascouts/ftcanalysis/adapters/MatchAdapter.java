@@ -1,20 +1,18 @@
 package com.javascouts.ftcanalysis.adapters;
 
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.javascouts.ftcanalysis.R;
-import com.javascouts.ftcanalysis.database.Match;
+import com.javascouts.ftcanalysis.room.Match;
 
 import java.util.List;
-
-/**
- * Created by seed on 12/29/17.
- */
 
 public class MatchAdapter extends ArrayAdapter<Match> {
 
@@ -39,7 +37,7 @@ public class MatchAdapter extends ArrayAdapter<Match> {
 
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
-            v = vi.inflate(R.layout.content_match_row, null);
+            v = vi.inflate(R.layout.content_matchrow, null);
 
         }
 
@@ -54,25 +52,24 @@ public class MatchAdapter extends ArrayAdapter<Match> {
             TextView tt5 = v.findViewById(R.id.mN);
 
             if (tt1 != null) {
-                tt1.setText(String.valueOf(p.getBlue1()));
+                tt1.setText(String.valueOf(p.blue1));
             }
 
             if (tt2 != null) {
-                tt2.setText(String.valueOf(p.getBlue2()));
+                tt2.setText(String.valueOf(p.blue2));
             }
 
             if (tt3 != null) {
-                tt3.setText(String.valueOf(p.getRed1()));
+                tt3.setText(String.valueOf(p.red1));
             }
             if (tt3 != null) {
-                tt4.setText(String.valueOf(p.getRed2()));
+                tt4.setText(String.valueOf(p.red2));
             }
             if(tt5 != null) {
-                tt5.setText(String.valueOf(p.getMatchNumber()));
+                tt5.setText(String.valueOf(p.matchNumber));
             }
         }
 
         return v;
     }
-
 }
